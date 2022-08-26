@@ -5,8 +5,9 @@
 # CLASSES
 class Joueurs:
     
-    def __init__(self):
+    def __init__(self, nom, prenom, date_naissance, sexe, classement):
         print("Joueurs")
         pass
 
+    
     

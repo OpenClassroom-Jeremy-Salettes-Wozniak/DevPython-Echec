@@ -5,6 +5,6 @@
 # CLASSES
 class Tours:
 
-    def __init__(self):
-        print("Tours")
-        pass
+    def __init__(self, matchs=[]):
+        self.matchs = matchs
+        
