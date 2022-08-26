@@ -6,9 +6,13 @@
 class Controllers:
 
     def __init__(self, views, joueurs, matchs, tournois, tours):
-        pass
-    
-    def run(self):
-        input("Appuyez sur entrée pour continuer...")
+        self.views = views
+        self.joueurs = joueurs
+        self.matchs = matchs
+        self.tournois = tournois
+        self.tours = tours
+        self.run()
 
+    def run(self):
+        pass
 
