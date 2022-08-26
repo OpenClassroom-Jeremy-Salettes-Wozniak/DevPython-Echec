@@ -9,6 +9,6 @@ class Controllers:
         pass
     
     def run(self):
-        pass
+        input("Appuyez sur entrée pour continuer...")
 
 

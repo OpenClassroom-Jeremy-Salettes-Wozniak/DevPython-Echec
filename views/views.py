@@ -6,5 +6,7 @@
 class Views: 
 
     def __init__(self):
-        print("Views")
         pass
+
+    def input(self, message):
+        return input(message)
