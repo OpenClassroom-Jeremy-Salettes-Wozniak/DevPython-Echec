@@ -3,10 +3,12 @@
 ## CONTROLLERS
 from controllers.controllers import Controllers
 ## MODELS
-from models.joueurs import Joueurs
-from models.matchs import Matchs
-from models.tournois import Tournois
-from models.tours import Tours
+from models.laps import Laps
+from models.match import Match
+from models.player import Player
+from models.tournament import Tournament
+
+
 ## VIEWS
 from views.views import Views
 
@@ -16,12 +18,14 @@ from views.views import Views
 class App:
 
     def __init__(self):
-        self.views = Views()
-        self.joueurs = Joueurs()
-        self.matchs = Matchs()
-        self.tournois = Tournois()
-        self.tours = Tours()
-        self.controllers = Controllers(self.views, self.joueurs, self.matchs, self.tournois, self.tours)
+        self.views = Views(self)
+        self.laps = Laps()
+        self.match = Match()
+        self.player = Player()
+        self.tournament = Tournament()
+        self.controllers = Controllers(self, self.views, self.laps, self.match, self.player, self.tournament)
+        self.controllers.run()
+        pass
 
     def run(self):
         self.controllers.run()

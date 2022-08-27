@@ -4,15 +4,15 @@
 
 # CLASSES
 class Controllers:
-
-    def __init__(self, views, joueurs, matchs, tournois, tours):
+    def __init__(self, views, laps, matchs, players, tournaments):
         self.views = views
-        self.joueurs = joueurs
+        self.laps = laps
         self.matchs = matchs
-        self.tournois = tournois
-        self.tours = tours
-        self.run()
-
-    def run(self):
+        self.players = players
+        self.tournaments = tournaments
         pass
 
+
+    def run(self):
+        self.views.run()
+        pass
