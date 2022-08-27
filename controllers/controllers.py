@@ -1,4 +1,5 @@
 # IMPORT
+import os
 
 # VARIABLES
 
@@ -15,8 +16,25 @@ class Controllers:
         pass
 
     def accueilControllers(self):
+        # VIEWS
         choice = self.view.accueilViews()
         if choice == "1":
-            self.tournament.createTournament()
+            # CONTROLLERS
+            self.createTournamentControllers()
+        elif choice == "2":
+            self.tournament.continueTournament()
+        elif choice == "3":
+            self.tournament.reportTournament()
+        elif choice == "4":
+            exit()
+        else:
+            os.system("clear")
+            self.view.erreurInput("Veuillez entrer un nombre entre 1 et 4", self.accueilControllers)
 
-        pass
+    def createTournamentControllers(self):
+        # VIEWS
+        New_tournament = self.view.createTournamentViews()
+        print(New_tournament)
+        # IL FAUT CREER LE MODEL
+
+    
