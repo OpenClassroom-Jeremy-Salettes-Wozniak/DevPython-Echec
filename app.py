@@ -18,17 +18,16 @@ from views.views import Views
 class App:
 
     def __init__(self):
-        self.views = Views(self)
+        self.views = Views()
         self.laps = Laps()
         self.match = Match()
         self.player = Player()
         self.tournament = Tournament()
-        self.controllers = Controllers(self, self.views, self.laps, self.match, self.player, self.tournament)
-        self.controllers.run()
+        self.controllers = Controllers(self.views, self.laps, self.match, self.player, self.tournament)
         pass
 
     def run(self):
-        self.controllers.run()
+        self.controllers
         pass
 
 # EXECUTION
