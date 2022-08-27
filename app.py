@@ -7,8 +7,6 @@ from models.laps import Laps
 from models.match import Match
 from models.player import Player
 from models.tournament import Tournament
-
-
 ## VIEWS
 from views.views import Views
 
