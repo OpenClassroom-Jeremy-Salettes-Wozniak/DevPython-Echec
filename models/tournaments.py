@@ -1,8 +1,3 @@
-from json import dumps
-import tinydb
-players = ["Player_one", "Player_two", "Player_three", "Player_four", "Player_five", "Player_six", 
-"Player_seven", "Player_eight"]
-
 class Tournaments:
 
     def __init__(
@@ -53,7 +48,7 @@ class Tournaments:
             "time_control": self.time_control,
             "description": self.description
         })
-        
+
     
     def __str__(self):
         message = "Tournament: " + self.name + "\n" 
@@ -71,30 +66,3 @@ class Tournaments:
 
     def __eq__(self, other):
         pass
-
-
-
-if __name__ == "__main__":
-    tournois1 = Tournaments(
-        name="Tournois1", 
-        location="Paris", 
-        date=["2022/08/12", "2022/08/13"], 
-        laps=4, 
-        tournées=[1,2,3], 
-        players=players, 
-        time_control=["bullet"], 
-        description="Description")
-    tournois1.save_tournament()
-
-    tournois2 = Tournaments(
-        name="Tournois2",
-        location="Paris",
-        date=["2022/08/12", "2022/08/13"],
-        laps=4,
-        tournées=[1,2,3],
-        players=players,
-        time_control=["bullet"],
-        description="Description")
-    tournois2.save_tournament()
-
-    print(tournois1)

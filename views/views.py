@@ -11,6 +11,9 @@ class Views:
     def __init__(self):
         pass
 
+################################
+############ ACCUEIL ###########
+################################
     def accueilViews(self):
         """ 
         Affiche la page d'accueil
@@ -18,12 +21,16 @@ class Views:
         print("############## MENU PRINCIPAL ##############")
         print("")
         print("1 - Créer un nouveau tournoi")
-        print("2 - Continuer un tournoi")
-        print("3 - Rapport d'un tournoi")
-        print("4 - Quitter")
+        print("2 - Selectionner un tournoi")
+        print("3 - Rapport de tournoi")
+        print("4 - Créer un nouveau joueur")
+        print("5 - Quitter")
         print("")
-        return input("Veuillez entrer un nombre entre 1 et 4 : ")
-    
+        return input("Veuillez entrer un nombre entre 1 et 5 : ")
+
+#################################
+######## GESTION ERREUR #########    
+#################################
     def erreurInput(self, message, fonction=False):
         """
         Affiche un message d'erreur
@@ -37,6 +44,9 @@ class Views:
         else:
             return False
 
+#################################
+############ TOURNAMENT #########
+#################################
     def createTournamentViews(self):
         """
         Affiche un formulaire pour créer un nouveau tournoi
@@ -61,6 +71,15 @@ class Views:
                 "control_time": control_time,
                 "description": description
         }
+
+#################################
+############ PLAYER #############
+#################################
+    def createPlayerViews(self):
+        """
+        Affiche un formulaire pour créer un nouveau joueur
+        """
+        name = input("Veuillez entrer le nom du joueur : ")
 
 if __name__ == "__main__":
     Views().createTournamentViews()

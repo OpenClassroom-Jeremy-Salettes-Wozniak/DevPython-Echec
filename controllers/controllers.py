@@ -1,7 +1,4 @@
 # IMPORT
-import os
-from models.tournaments import Tournaments
-from views.views import Views
 
 # VARIABLES
 
@@ -14,14 +11,11 @@ class Controllers:
         self.match = match
         self.player = player
         self.tournament = tournament
-        self.runControllers()
-        pass
-
-    def runControllers(self):
-        # AJOUTER DES CONTROLLERS ACTIFS
         self.accueilControllers()
-        pass
 
+################################
+############ ACCUEIL ###########
+################################
     def accueilControllers(self):
         # VIEWS
         choice = self.view.accueilViews(self)
@@ -29,17 +23,23 @@ class Controllers:
             # CONTROLLERS
             self.createTournamentControllers()
         elif choice == "2":
-            print("choix 2")
-            # self.tournament.continueTournament()
+            print("Selectionner un tournoi")
         elif choice == "3":
-            print("choix 3")
-            # self.tournament.reportTournament()
+            print("Rapport de tournoi")
+            # self.tournament.continueTournament()
         elif choice == "4":
+            print("Créer ou modifier joueur")
+            # self.tournament.reportTournament()
+        elif choice == "5":
             exit()
         else:
             os.system("clear")
             self.view.erreurInput("Veuillez entrer un nombre entre 1 et 4", self.accueilControllers)
 
+
+################################
+########## TOURNAMENT ##########
+################################
     def createTournamentControllers(self):
         value = self.view.createTournamentViews(self)
         if value == False:
@@ -50,12 +50,12 @@ class Controllers:
             print(f"Le tournoi {tournament.name} a bien été créé")
             self.accueilControllers()
 
-
-
-        # dans le dictionaire, on va recuperer les valeurs des inputs
-        # for key, value in self.view.createTournamentViews(self):
-        #     print(value)
-
-        # pass
-
-    
+#################################
+############ PLAYER #############
+#################################
+    def createPlayerControllers(self):
+        value = self.view.createPlayerViews(self)
+        if value == False:
+            self.accueilControllers()
+        else:
+            pass
