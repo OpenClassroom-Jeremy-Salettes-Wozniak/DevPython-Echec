@@ -1,12 +1,14 @@
 # IMPORT
+import os
+import tinydb
 
 ## CONTROLLERS
 from controllers.controllers import Controllers
 ## MODELS
 from models.laps import Laps
-from models.match import Match
-from models.player import Player
-from models.tournament import Tournament
+from models.matchs import Matchs
+from models.players import Players
+from models.tournaments import Tournaments
 ## VIEWS
 from views.views import Views
 
@@ -15,21 +17,15 @@ from views.views import Views
 # CLASSES
 class App:
 
-    def __init__(self):
-        self.views = Views()
-        self.laps = Laps()
-        self.match = Match()
-        self.player = Player()
-        self.tournament = Tournament()
-        self.controllers = Controllers(self.views, self.laps, self.match, self.player, self.tournament)
-        pass
-
-    def run(self):
-        self.controllers
-        pass
+    def __init__(self, controllers, views, laps, match, player, tournament):
+        self.views = views
+        self.laps = laps
+        self.match = match
+        self.player = player
+        self.tournament = tournament
+        self.controllers = controllers(self.views, self.laps, self.match, self.player, self.tournament)
+        
 
 # EXECUTION
 if __name__ == "__main__":
-    app = App()
-    app.run()
-    
+    App(Controllers, Views, Laps, Matchs, Players, Tournaments)

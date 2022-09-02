@@ -4,7 +4,6 @@
 
 # CLASSES
 import os
-from random import choices
 
 
 class Views: 
@@ -40,55 +39,28 @@ class Views:
 
     def createTournamentViews(self):
         """
-        Affiche un formulaire
+        Affiche un formulaire pour créer un nouveau tournoi
         """
-        print("############## CREATION DE TOURNOI ##############")
-        print("")
-        print("Nom du tournoi : ")
-        name = str(input())
-        print("Lieux du tournoi : ")
-        location = str(input())
-        print("Date du tournoi au format YYYY-MM-DD : ")
-        date = str(input())
-        print("Nombre de tours : ")
-        nb_laps = str(input())
-        print("Tournées (liste des instances rondes): ")
-        Tournées = str(input())
-        print("players (liste des instances joueurs): ")
-        players = str(input())
-        print("Controle de temps (liste des instances controle de temps): ")
-        print("1 - bullet")
-        print("2 - blitz")
-        print("3 - rapid")
-        controle_de_temps = str(input())
-        while controle_de_temps != "1" and controle_de_temps != "2" and controle_de_temps != "3":
-            print("Veuillez entrer un nombre entre 1 et 3 :")
-            controle_de_temps = str(input())
-        # if controle_de_temps == "1":
-        #     controle_de_temps = "bullet"
-        # elif controle_de_temps == "2":
-        #     controle_de_temps = "blitz"
-        # elif controle_de_temps == "3":
-        #     controle_de_temps = "rapid"
-        # else:
-        #     self.erreurInput("Veuillez entrer un nombre entre 1 et 3")
-        #     controle_de_temps = str(input())
-        print("Description du tournoi : ")
-        description = str(input())
-        print("")
-        print("############## TOURNOI CREE ##############")
-        print("")
-        print("Nom du tournoi : " + name)
-        print("Lieux du tournoi : " + location)
-        print("Date du tournoi : " + date)
-        print("Nombre de tours : " + nb_laps)
-        print("Tournées (liste des instances rondes): " + Tournées)
-        print("players (liste des instances joueurs): " + players)
-        print("Controle de temps (liste des instances controle de temps): " + controle_de_temps)
-        print("Description du tournoi : " + description)
-        print("")
-        return name, location, date, nb_laps, Tournées, players, controle_de_temps, description
+        name = input("Veuillez entrer le nom du tournoi : ")
+        location = input("Veuillez entrer le lieu du tournoi : ")
+        date = input("Veuillez entrer la date du tournoi : ")
+        laps = input("Veuillez entrer le nombre de tours du tournoi : ")
+        laps_instance = input("Veuillez entrer le nombre de match par tour : ")
+        players = input("Veuillez entrer le nom des joueurs séparés par une virgule : ")
+        control_time = input("Veuillez entrer le temps de contrôle : ")
+        description = input("Veuillez entrer une description du tournoi : ")
 
+        # On vérifie que les inputs sont corrects
+        return {
+                "name": name,
+                "location": location,
+                "date": date,
+                "laps": laps,
+                "laps_instance": laps_instance,
+                "players": players,
+                "control_time": control_time,
+                "description": description
+        }
 
-        
-
+if __name__ == "__main__":
+    Views().createTournamentViews()
