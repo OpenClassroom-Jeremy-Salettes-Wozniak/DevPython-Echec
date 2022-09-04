@@ -1,4 +1,5 @@
-class Tournaments:
+import tinydb
+class Tournaments():
 
     def __init__(
         self, 

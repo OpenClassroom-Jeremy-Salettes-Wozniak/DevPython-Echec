@@ -1,6 +1,5 @@
 # IMPORT
 import os
-import tinydb
 
 ## CONTROLLERS
 from controllers.controllers import Controllers

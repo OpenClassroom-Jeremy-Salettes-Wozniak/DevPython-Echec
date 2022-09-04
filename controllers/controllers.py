@@ -45,7 +45,7 @@ class Controllers:
         if value == False:
             self.accueilControllers()
         else:
-            tournament = Tournaments(value["name"], value["location"], value["date"], value["laps"], value["laps_instance"], value["players"], value["control_time"], value["description"])
+            tournament = self.tournament(value["name"], value["location"], value["date"], value["laps"], value["laps_instance"], value["players"], value["control_time"], value["description"])
             tournament.save_tournament()
             print(f"Le tournoi {tournament.name} a bien été créé")
             self.accueilControllers()
