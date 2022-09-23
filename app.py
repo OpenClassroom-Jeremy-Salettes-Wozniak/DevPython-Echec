@@ -1,30 +1,24 @@
-# IMPORT
 import os
 
-## CONTROLLERS
-from controllers.controllers import Controllers
-## MODELS
-from models.laps import Laps
-from models.matchs import Matchs
-from models.players import Players
-from models.tournaments import Tournaments
-## VIEWS
-from views.views import Views
+from models.tournaments import Tournament
+from models.players import Player
+from controllers.controllers import Controller
+from views.views import View   
 
-# VARIABLES
 
-# CLASSES
 class App:
 
-    def __init__(self, controllers, views, laps, match, player, tournament):
-        self.views = views
-        self.laps = laps
-        self.match = match
-        self.player = player
+    def __init__(self, view, controller, tournament, player):
+        self.view = view
+        self.controller = controller
         self.tournament = tournament
-        self.controllers = controllers(self.views, self.laps, self.match, self.player, self.tournament)
-        
+        self.player = player
 
-# EXECUTION
+    def run(self):
+        self.controller(self.view, self.tournament, self.player)
+        
 if __name__ == "__main__":
-    App(Controllers, Views, Laps, Matchs, Players, Tournaments)
+    os.system("cls")
+    app = App(View, Controller, Tournament, Player)
+    app.run()
+    
