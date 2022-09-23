@@ -1,5 +1,7 @@
 import os
-from pydoc import plain
+
+
+from models.tournaments import Tournament
 
 class Controller:
 
@@ -35,8 +37,6 @@ class Controller:
             os.system("cls")
             self.accueil("---- Veuillez selectionner un choix valide ----")
 
-
-    os.system("tv fichier.csv")
     def creerTournoi(self):
         try: 
             os.system("cls")
@@ -72,112 +72,25 @@ class Controller:
         except Exception as e:
             print(e)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import os
-# from secrets import choice
-# from statistics import mode
-
-
-# class Controller:
-
-#     def __init__(self, view, tournament):
-#         self.view = view()
-#         self.tournament = tournament
-#         self.accueil()
-    
-#     def accueil(self):
-#         """Affiche le menu principal"""
-#         os.system("cls")
-#         self.view.afficher(self.view, "Bienvenue dans le gestionnaire de tournoi d'échec")
-#         choice = self.view.afficherMenu()
-#         if choice == "1":
-#             self.creerTournoi()
-#         elif choice == "2":
-#             self.creerUnJoueur()
-#         elif choice == "3":
-#             self.selectionnerTournoi()
-#         elif choice == "4":
-#             self.rapport()
-#         elif choice == "5":
-#             exit()
-#         else:
-#             os.system("cls")
-#             self.view.erreur("Veuillez selectionner un numéro valide", self.accueil())
-
-#     def creerTournoi(self):
-#         """Créer un tournoi"""
-#         os.system("cls")
-#         self.view.afficher("Créer un tournoi")
-#         tournament = self.view.creerTournoi()
-#         self.tournament.createTournament(tournament)
-#         self.accueil()
-        
+    def selectionnerTournoi(self):
+        os.system("cls")
+        self.view.titre(self, "Selectionner un tournoi")
+        tournois = self.tournament.tournaments_load(self)
+        id = self.view.selectionnerTournoi(self, tournois)
+        self.affichageTournoi(id)
+
+    def affichageTournoi(self, id):
+        os.system("cls")
+        self.view.titre(self, "Affichage du tournoi")
+        tournoi = self.tournament.tournament_load(self, id)
+        self.view.afficherTournoi(self, tournoi)
+        print("1 - Ajouter un joueur")
+        print("2 - Lancer le tournoi")
+        print("3 - Retour")
+        choix = input(f"Veuillez selectionner le numéro de votre choix : ")
+        if choix == "1":
+            self.ajouterJoueur(id)
+        elif choix == "2":
+            self.lancerTournoi(id)
+        elif choix == "3":
+            self.accueil()

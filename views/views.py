@@ -1,5 +1,4 @@
-from re import RegexFlag
-from time import time
+import prettytable
 
 
 class View:
@@ -34,8 +33,7 @@ class View:
             tournament_location = input("Lieu du tournoi : ")
 
         tournament_date = input("Date du tournoi au format jj/mm/aaaa : ")
-        # ou si on veut que l'utilisateur ne puisse pas entrer autre chose qu'une date au format jj/mm/aaaa
-        while tournament_date == "" or not tournament_date[2] == "/" or not tournament_date[5] == "/":
+        while (tournament_date == "" or len(tournament_date) != 10 and tournament_date != "jj/mm/aaaa"):
             if tournament_date == "":
                 print(f"La date du tournoi est obligatoire")
             else:
@@ -108,252 +106,80 @@ class View:
         }
         return player
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import os
-# from time import time
-# from models.tournaments import Tournament
-
-
-# class View:
-    
-#     def __init__(self):
-#         """Constructor for View"""
-#         print("View")
-
-
-#     def afficher(self, titre):
-#         print("----------------------------------------------------------------------------------")
-#         print(f"{titre}")
-#         print("----------------------------------------------------------------------------------")
-
-#     def erreur(self, message, function, functionAtive=False):
-#         """Affiche un message d'erreur et renvoie la fonction en cours"""
-#         os.system("cls")
-#         print(f"Erreur : {message}")
-#         if functionAtive:
-#             return function()
+    def selectionnerTournoi(self, tournaments):
+        print("----------------------------------------------------------------------------------")
+        print("Liste des tournois")
+        print("----------------------------------------------------------------------------------")
+        table = prettytable.PrettyTable()
+        table.field_names = [
+            "Identifiant",
+            "tournament_name",
+            "tournament_location",
+            "tournament_date",
+            "tournament_time_control",
+            "tournament_description",
+            "tournament_laps",
+            "tournament_tournees",
+            "tournament_players",
+        ]
+        for tournament in tournaments:
+            tournament_id = tournament.doc_id
+            table.add_row(
+                [
+                    tournament_id,
+                    tournament["tournament_name"],
+                    tournament["tournament_location"],
+                    tournament["tournament_date"],
+                    tournament["tournament_time_control"],
+                    tournament["tournament_description"],
+                    tournament["tournament_laps"],
+                    tournament["tournament_tournees"],
+                    tournament["tournament_players"],
+                ]
+            )    
+        print(table)
+        tournament_id = input("Veuillez selectionner l'identifiant du tournoi : ")
+        try:
+            tournament_id = int(tournament_id)
+        except Exception:
+            tournament_id = input("Veuillez selectionner un identifiant valide : ")
+        print(f"Vous avez sélectionné le tournoi {tournament_id} qui pour type  {type(tournament_id)}")
+        list_id = []
+        for tournament in tournaments:
+            list_id.append(tournament.doc_id)
+        while tournament_id not in list_id:
+            tournament_id = input("Veuillez selectionner un identifiant valide : ")
+            try:
+                tournament_id = int(tournament_id)
+            except Exception:
+                tournament_id = input("Veuillez selectionner un identifiant valide : ")
+        return tournament_id
         
-        
-#     def afficherMenu(self):        
-#         print("1. Créer un tournoi")
-#         print("2. Créer un joueur")
-#         print("3. Selectionne un tournoi")
-#         print("4. Rapport")
-#         print("5. Quitter")
-#         print("")
-#         choice = input("Veuillez selectionner le numéro de votre choix : ")
-#         return choice
-
-#     def creerTournoi(self, titre):
-#         self.afficher(titre)
-#         tournament_name = input("Nom du tournoi : ")
-#         tournament_location = input("Lieu du tournoi : ")
-#         tournament_date = input("Date du tournoi : ")
-#         time_control = {
-#             "1": "Bullet",
-#             "2": "Blitz",
-#             "3": "Coup rapide"
-#         }
-#         print(f"1. Bullet")
-#         print(f"2. Blitz")
-#         print(f"3. Coup rapide")
-#         choice = input("Veuillez selectionner le numéro de votre choix : ")
-#         tournament_time_control = time_control[choice]
-#         tournament_description = input("Description du tournoi : ")
-
-#         tournament = {
-#             "tournament_name": tournament_name,
-#             "tournament_location": tournament_location,
-#             "tournament_date": tournament_date,
-#             "tournament_time_control": tournament_time_control,
-#             "tournament_description": tournament_description
-#         }
-#         print("Le tournoi a bien été créé")
-#         return tournament
-    
-#     def creerUnJoueur(self, titre):
-#         self.afficher(titre)
-#         nom = input("Nom du joueur : ")
-#         prenom = input("Prénom du joueur : ")
-#         date = input("Date de naissance : ")
-#         sexe = input("Sexe : ")
-#         classement = input("Classement : ")
-#         joueur = {
-#             "nom": nom,
-#             "prenom": prenom,
-#             "date": date,
-#             "sexe": sexe,
-#             "classement": classement
-#         }
-#         if joueur:
-#             print("Le joueur a bien été créé")
-#         return joueur
-
-
-#     def selectionnerTournoi(self, tournois, titre):
-#         self.afficher(titre)
-#         print("Liste des tournois :")
-#         for tournoi in tournois:
-#             print(f"{tournoi['id']} - {tournoi['nom']}")
-#         print("")
-#         idTournoi = input("Veuillez saisir l'id du tournoi : ")
-#         return idTournoi
-
-#     def afficherTournoi(self, tournoi):
-#         self.afficher("Affichage du tournoi")
-#         print(f"Nom : {tournoi['nom']}")
-#         print(f"Lieu : {tournoi['lieu']}")
-#         print(f"Date : {tournoi['date']}")
-#         print(f"Nombre de tour : {tournoi['nbTour']}")
-#         print(f"matchs : {tournoi['matchs']}")
-#         print(f"players : {tournoi['players']}")
-#         print(f"Temps de contrôle : {tournoi['temps']}")
-#         print(f"Description : {tournoi['description']}")
-#         print("")
-#         print("1. Ajouter un joueur")
-#         print("2. Lancer le tournoi")
-#         print("3. Rapport du tournoi")
-#         print("4. Retour")
-#         print("")
-#         return input("Veuillez faire votre choix : ")
-
-#     def ajouterJoueur(self, joueurs):
-#         self.afficher("Ajout d'un joueur")
-#         print("Liste des joueurs :")
-#         for joueur in joueurs:
-#             print(f"{joueur['id']} - {joueur['nom']} {joueur['prenom']}")
-#         print("")
-#         idJoueur = input("Veuillez saisir l'id du joueur : ")
-#         return idJoueur
-
-#     def lancerTournoi(self, tournoi):
-#         # LANCER 
-#         print("Lancement du tournoi")
-
-
-#     def rapportTournoi(self, tournoi):
-#         # RAPPORT
-#         print("Rapport du tournoi")
-        
-#     def rapport(self):
-#         # RAPPORT
-#         self.afficher("Rapport")
-#         print("1. Rapport des joueurs")
-#         print("2. Rapport des tournois")
-#         print("3. Rapport des matchs")
-#         print("4. Retour")
-#         print("")
-#         return input("Veuillez faire votre choix : ")
-    
+    def afficherTournoi(self, tournament):
+        print("----------------------------------------------------------------------------------")
+        print("Détail du tournoi")
+        print("----------------------------------------------------------------------------------")
+        table = prettytable.PrettyTable()
+        table.field_names = [
+            "tournament_name",
+            "tournament_location",
+            "tournament_date",
+            "tournament_time_control",
+            "tournament_description",
+            "tournament_laps",
+            "tournament_tournees",
+            "tournament_players",
+        ]
+        table.add_row(
+            [
+                tournament["tournament_name"],
+                tournament["tournament_location"],
+                tournament["tournament_date"],
+                tournament["tournament_time_control"],
+                tournament["tournament_description"],
+                tournament["tournament_laps"],
+                tournament["tournament_tournees"],
+                tournament["tournament_players"],
+            ]
+        )
+        print(table)
