@@ -138,22 +138,14 @@ class View:
                 ]
             )    
         print(table)
-        tournament_id = input("Veuillez selectionner l'identifiant du tournoi : ")
-        try:
-            tournament_id = int(tournament_id)
-        except Exception:
-            tournament_id = input("Veuillez selectionner un identifiant valide : ")
-        print(f"Vous avez sélectionné le tournoi {tournament_id} qui pour type  {type(tournament_id)}")
         list_id = []
         for tournament in tournaments:
-            list_id.append(tournament.doc_id)
-        while tournament_id not in list_id:
+            list_id.append(str(tournament.doc_id))
+        tournament_id = input("Veuillez selectionner l'identifiant du tournoi : ")
+        while tournament_id == "" or not tournament_id in list_id:
             tournament_id = input("Veuillez selectionner un identifiant valide : ")
-            try:
-                tournament_id = int(tournament_id)
-            except Exception:
-                tournament_id = input("Veuillez selectionner un identifiant valide : ")
-        return tournament_id
+        return int(tournament_id)
+
         
     def afficherTournoi(self, tournament):
         print("----------------------------------------------------------------------------------")
@@ -183,3 +175,69 @@ class View:
             ]
         )
         print(table)
+
+
+    def afficherJoueurs(self, players):
+        print("----------------------------------------------------------------------------------")
+        print("Liste des joueurs")
+        print("----------------------------------------------------------------------------------")
+        table = prettytable.PrettyTable()
+        table.field_names = [
+            "Identifiant",
+            "player_last_name",
+            "player_first_name",
+            "player_birth_date",
+            "player_sexe",
+        ]
+        for player in players:
+            player_id = player.doc_id
+            table.add_row(
+                [
+                    player_id,
+                    player["player_last_name"],
+                    player["player_first_name"],
+                    player["player_birth_date"],
+                    player["player_sexe"],
+                ]
+            )
+        print(table)
+        player_id = input("Veuillez selectionner l'identifiant du joueur : ")
+        while player_id == "":
+            player_id = input("Veuillez selectionner un identifiant valide : ")
+        return int(player_id)
+
+    def lancerTournoi(self, id_tournament):
+        print("----------------------------------------------------------------------------------")
+        print("Lancement du tournoi")
+        print("----------------------------------------------------------------------------------")
+        print(f"Le tournoi {id_tournament['tournament_name']} a été lancé")
+        # RESULTAT DU TOURNOI DU ROUND 1
+        round_one = self.round(1)
+        # RESULTAT DU TOURNOI DU ROUND 2
+        round_two = self.round(2)
+        # RESULTAT DU TOURNOI DU ROUND 3
+        round_tree = self.round(3)
+        # RESULTAT DU TOURNOI DU ROUND 4
+        round_four = self.round(4)
+
+        return round_one, round_two, round_tree, round_four
+
+    
+    def round(self, round, matchs):
+        print("----------------------------------------------------------------------------------")
+        print("Lancement du round")
+        print("----------------------------------------------------------------------------------")
+        print(f"Le round {round} a été lancé")
+        # RESULTAT DU ROUND 1
+        # RESULTAT DU ROUND 2
+        # RESULTAT DU ROUND 3
+        # RESULTAT DU ROUND 4
+
+    def match(self, round, player1, player2):
+        print("----------------------------------------------------------------------------------")
+        print("Lancement du match")
+        print("----------------------------------------------------------------------------------")
+        print(f"Le match du round {round} a été lancé")
+        player1_score = input(f"Score du joueur {player1['player_last_name']} : ")
+        player2_score = input(f"Score du joueur {player2['player_last_name']} : ")
+        return player1_score, player2_score

@@ -1,4 +1,5 @@
 import os
+import re
 import tinydb
 
 class Player:
@@ -37,3 +38,27 @@ class Player:
                 "player_again": self.player_again,
             }
         )
+
+    def players_load(self):
+        """
+        Charge les joueurs
+        """
+        db = tinydb.TinyDB("data/db.json")
+        table = db.table("players")
+        return table.all()
+
+    def player_load(self, id):
+        """
+        Charge un joueur
+        """
+        db = tinydb.TinyDB("data/db.json")
+        table = db.table("players")
+        print(table.get(doc_id=id))
+
+    def player_modify_score(self, id, score):
+        """
+        Modifie le score d'un joueur
+        """
+        db = tinydb.TinyDB("data/db.json")
+        table = db.table("players")
+        table.update({"player_ranking": score}, tinydb.where("id") == id)

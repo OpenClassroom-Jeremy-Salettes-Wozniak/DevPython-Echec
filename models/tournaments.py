@@ -71,3 +71,25 @@ class Tournament:
         table = db.table("tournaments")
         return table.get(doc_id=id)
         
+    def tournament_players_add(self, id_player, id_tournament):
+        """ 
+        Ajouter joueur id_player qui à l'id id_tournament
+        """
+        # si id_player existe deja dans la liste des joueurs du tournoi tournament_players
+        # alors on ne fait rien
+        # sinon on ajoute le joueur
+        db = tinydb.TinyDB("data/db.json")
+        tournoi = self.tournament.tournament_load(self, id_tournament)
+        if id_player not in tournoi["tournament_players"]:
+            tournoi["tournament_players"].append(id_player)
+            table = db.table("tournaments")
+            table.update(tournoi, doc_ids=[id_tournament])
+            # Supprimer no_player si il est dans la liste des joueurs
+            if "no_player" in tournoi["tournament_players"]:
+                tournoi["tournament_players"].remove("no_player")
+                table = db.table("tournaments")
+                table.update(tournoi, doc_ids=[id_tournament])
+            return True
+        else:
+            print("Le joueur est déjà dans la liste des joueurs du tournoi")
+            return False
