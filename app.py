@@ -1,24 +1,26 @@
-import os
-
-from models.tournaments import Tournament
-from models.players import Player
-from controllers.controllers import Controller
-from views.views import View   
-
+from controllers import controller
+from views import view
+from models import match
+from models import player
+from models import tournament
+from models import round
 
 class App:
+    """ Main class of the application """
 
-    def __init__(self, view, controller, tournament, player):
-        self.view = view
-        self.controller = controller
-        self.tournament = tournament
-        self.player = player
+    def __init__(self):
+        self.view = view.View
+        self.match = match.Match
+        self.player = player.Player
+        self.tournament = tournament.Tournament
+        self.round = round.Round
+        self.controller = controller.Controller(self.view, self.match, self.player, self.tournament, self.round)
 
     def run(self):
-        self.controller(self.view, self.tournament, self.player)
-        
+        """ Run the application """
+        self.controller.run()
+
 if __name__ == "__main__":
-    os.system("cls")
-    app = App(View, Controller, Tournament, Player)
+    app = App()
     app.run()
     
