@@ -111,16 +111,20 @@ class Controller:
             dict_controller_gestion_tournois["function"] = print(f"gestion_tournois() : error{e}")
         return dict_controller_gestion_tournois
 
-    def gestion_joueur(self):
+    def gestion_joueur(self, *message):
         """ Gestion des joueurs """
         dict_controller_gestion_joueur = {}
         try:
             os.system("cls")
             self.view.header(self, "Gestion des joueurs")
+            if message:
+                message = message[0]
+                print("### " + message + " ###")
             gestion_joueur = self.view.gestion_joueur(self)
             if gestion_joueur["choice"] == 1:
                 os.system("cls")
                 self.creer_joueur()
+                self.gestion_joueur("Le joueur a bien été créé")
             elif gestion_joueur["choice"] == 2:
                 #TODO: self.modifier_joueur()
                 pass
@@ -131,8 +135,9 @@ class Controller:
                 #TODO: self.afficher_joueur()
                 pass
             elif gestion_joueur["choice"] == 5:
-                #TODO: self.afficher_tous_joueurs()
-                pass
+                db_player = self.player.get_table_players(self, tinydb)
+                self.afficher_tous_joueurs(db_player["players"])
+                self.view.retour_accueil(self)
             elif gestion_joueur["choice"] == 6:
                 self.run()
         except Exception as e:
@@ -367,37 +372,37 @@ class Controller:
         #     dict_controller_afficher_tous_joueurs["function"] = print(f"afficher_tous_joueurs() : error{e}")
         # return dict_controller_afficher_tous_joueurs
     
-    #TODO:def all_table_players(self, players):
-        # """ 
-        # Get all players 
-        # """
-        # dict_controller_all_players = {}
-        # try:
-        #     all_players = players["players"]
-        #     prettytable_players = prettytable.PrettyTable()
-        #     prettytable_players.field_names = ["ID", "Nom", "Prénom", "Date de naissance", "Sexe", "Classement"]
-        #     tableau_id = []
-        #     for player in all_players:
-        #         player_id = player.doc_id
-        #         tableau_id.append(player_id)
-        #         prettytable_players.add_row([
-        #             player_id,
-        #             player["player_last_name"],
-        #             player["player_first_name"],
-        #             player["date_of_birth"],
-        #             player["sexe"],
-        #             player["ranking"]
-        #         ])
-        #     print(prettytable_players)
-        #     # DICTIONNAIRE
-        #     dict_controller_all_players["tableau_id"] = tableau_id
-        #     dict_controller_all_players["status"] = True
-        #     dict_controller_all_players["function"] = f"all_players() : Get all players"
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_all_players["status"] = False
-        #     dict_controller_all_players["function"] = print(f"all_players() : error{e}")
-        # return dict_controller_all_players
+    def afficher_tous_joueurs(self, players):
+        """ 
+        Get all players 
+        """
+        dict_controller_all_players = {}
+        try:
+            all_players = players
+            prettytable_players = prettytable.PrettyTable()
+            prettytable_players.field_names = ["ID", "Nom", "Prénom", "Date de naissance", "Sexe", "Classement"]
+            tableau_id = []
+            for player in all_players:
+                player_id = player.doc_id
+                tableau_id.append(player_id)
+                prettytable_players.add_row([
+                    player_id,
+                    player["player_last_name"],
+                    player["player_first_name"],
+                    player["date_of_birth"],
+                    player["sexe"],
+                    player["ranking"]
+                ])
+            print(prettytable_players)
+            # DICTIONNAIRE
+            dict_controller_all_players["tableau_id"] = tableau_id
+            dict_controller_all_players["status"] = True
+            dict_controller_all_players["function"] = f"all_players() : Get all players"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_all_players["status"] = False
+            dict_controller_all_players["function"] = print(f"all_players() : error{e}")
+        return dict_controller_all_players
 
     #TODO:def table_player(self, player, id):
         # """ Get all player """

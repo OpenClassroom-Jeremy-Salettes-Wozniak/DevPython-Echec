@@ -58,3 +58,22 @@ class Player:
             dict_save_player["message"] = f"Player: {self.player_first_name, self.player_last_name, self.date_of_birth, self.sexe, self.ranking} not saved"
             dict_save_player["function"] = f"save_player() : {e}"
         return dict_save_player
+
+    def get_table_players(self, tinydb):
+        """ Return all players """
+        dict_get_all_players = {}
+        try:
+            # Créer une instance de TinyDB
+            db = tinydb.TinyDB("data/db.json")
+            # Créer une instance de la table Tournament
+            table = db.table("players")
+            # Récupérer tous les tournois
+            all_players = table.all()
+            dict_get_all_players["status"] = True
+            dict_get_all_players["function"] = f"get_all_tournaments() : Return all tournament"
+            dict_get_all_players["players"] = all_players
+        except Exception as e:
+            dict_get_all_players["status"] = False
+            dict_get_all_players["players"] = all_players
+            dict_get_all_players["function"] = print(f"get_all_tournament() : {e}")
+        return dict_get_all_players
