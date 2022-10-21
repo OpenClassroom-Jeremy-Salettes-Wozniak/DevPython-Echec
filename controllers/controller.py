@@ -68,10 +68,6 @@ class Controller:
             elif gestion_tournois["choice"] == 2:
                 os.system("cls")
                 tournois = self.modifier_tournoi(tournois)
-                # self.afficher_tournoi(tournoi["tournament"], tournoi[])
-                # self.view.footer(self)
-                # demande_id_tournoi = self.view.demande_id_tournoi(self)
-
             elif gestion_tournois["choice"] == 3:
                 self.delete_tournament()
             elif gestion_tournois["choice"] == 4:
@@ -303,39 +299,6 @@ class Controller:
         #     dict_controller_lancer_tournoi["status"] = False
         #     dict_controller_lancer_tournoi["function"] = print(f"lancer_tournoi() : error{e}")
         # return dict_controller_lancer_tournoi
-    
-    # def all_table_tournaments(self, tournaments):
-    #     """ Get all tournaments """
-    #     dict_controller_all_tournaments = {}
-    #     try:
-    #         all_tournaments = tournaments["tournaments"]
-    #         prettytable_tournaments = prettytable.PrettyTable()
-    #         prettytable_tournaments.field_names = ["ID", "Nom", "Lieu", "Date", "Nombre de tours", "Tour en cours", "Joueurs", "Contrôle du temps", "Description"]
-    #         tableau_id = []
-    #         for tournament in all_tournaments:
-    #             tournament_id = tournament.doc_id
-    #             tableau_id.append(tournament_id)
-    #             prettytable_tournaments.add_row([
-    #                 tournament_id,
-    #                 tournament["tournament_name"],
-    #                 tournament["tournament_location"],
-    #                 tournament["tournament_date"],
-    #                 tournament["tournament_number_round"],
-    #                 tournament["tournament_instance_round"],
-    #                 tournament["tournament_players"],
-    #                 tournament["tournament_control_time"],  
-    #                 tournament["tournament_description"]
-    #             ])
-    #         print(prettytable_tournaments)
-    #         # DICTIONNAIRE
-    #         dict_controller_all_tournaments["tableau_id"] = tableau_id
-    #         dict_controller_all_tournaments["status"] = True
-    #         dict_controller_all_tournaments["function"] = f"all_tournaments() : Get all tournaments"
-    #     except Exception as e:
-    #         # DICTIONNAIRE
-    #         dict_controller_all_tournaments["status"] = False
-    #         dict_controller_all_tournaments["function"] = print(f"all_tournaments() : error{e}")
-    #     return dict_controller_all_tournaments
 
 # TODO: JOUEURS
     def creer_joueur(self):
