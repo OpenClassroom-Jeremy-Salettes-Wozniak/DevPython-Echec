@@ -67,7 +67,11 @@ class Controller:
                     self.gestion_tournois("Le tournoi n'a pas été créé")
             elif gestion_tournois["choice"] == 2:
                 os.system("cls")
-                pass
+                tournois = self.modifier_tournoi(tournois)
+                # self.afficher_tournoi(tournoi["tournament"], tournoi[])
+                # self.view.footer(self)
+                # demande_id_tournoi = self.view.demande_id_tournoi(self)
+
             elif gestion_tournois["choice"] == 3:
                 self.delete_tournament()
             elif gestion_tournois["choice"] == 4:
@@ -245,24 +249,32 @@ class Controller:
             dict_controller_all_tournament["function"] = print(f"all_tournament() : error{e}")
         return dict_controller_all_tournament
 
-    #TODO: def modifier_tournoi(self):
-        # """ Modifier un tournoi """
-        # dict_controller_modifier_tournoi = {}
-        # try:
-        #     self.view.header(self, "Modifier un tournoi")
-        #     self.all_table_tournaments = self.tournament.all_table_tournaments(tinydb, os)
-            
-        #     id_tournoi = self.view.demande_id(self)
-        #     modifier_tournoi = self.view.modifier_tournoi(self, id_tournoi)
-
-        #     # DICTIONNAIRE
-        #     dict_controller_modifier_tournoi["status"] = True
-        #     dict_controller_modifier_tournoi["function"] = f"modifier_tournoi() : Modify a tournament"
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_modifier_tournoi["status"] = False
-        #     dict_controller_modifier_tournoi["function"] = print(f"modifier_tournoi() : error{e}")
-        # return dict_controller_modifier_tournoi
+    def modifier_tournoi(self, tournaments):
+        """ Modifier un tournoi """
+        dict_controller_modifier_tournoi = {}
+        try:
+            self.view.header(self, "Modifier un tournoi")
+            # VIEW
+            afficher_tournois = self.afficher_tous_tournois(tournaments)
+            self.view.footer(self)
+            demande_id_tournoi = self.view.demande_id_tournoi(self, afficher_tournois["list_id_tournament"])
+            tournoi = self.tournament.get_table_tournament(self, tinydb, demande_id_tournoi["tournament_id"])
+            self.view.header(self, "Afficher un tournoi | Tournoi")
+            self.afficher_tournoi(tournoi["tournament"], demande_id_tournoi["tournament_id"])
+            self.view.footer(self)
+            nouveau_tournoi = self.view.modifier_tournoi(self, tournoi["tournament"])
+            self.tournament.modify_tournament(self, nouveau_tournoi["tournament"], tinydb, demande_id_tournoi["tournament_id"])
+            # DICTIONNAIRE
+            dict_controller_modifier_tournoi["status"] = True
+            dict_controller_modifier_tournoi["function"] = f"modifier_tournoi() : Modify a tournament"
+            # DICTIONNAIRE
+            dict_controller_modifier_tournoi["status"] = True
+            dict_controller_modifier_tournoi["function"] = f"modifier_tournoi() : Modify a tournament"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_modifier_tournoi["status"] = False
+            dict_controller_modifier_tournoi["function"] = print(f"modifier_tournoi() : error{e}")
+        return dict_controller_modifier_tournoi
         
     def delete_tournament(self):
         """ Delete a tournament """

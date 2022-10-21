@@ -132,12 +132,27 @@ class Tournament:
             # Créer une instance de la table Tournament
             table = db.table("Tournament")
             # selectionner le tournoi
-            table.delete(doc_ids=[id])
-
-
+            table.remove(doc_ids=[int(id)])
             dict_delete_tournament["status"] = True
             dict_delete_tournament["function"] = f"delete_tournament() : Delete the tournament"
         except Exception as e:
             dict_delete_tournament["status"] = False
             dict_delete_tournament["function"] = print(f"delete_tournament() : {e}")
         return dict_delete_tournament
+
+    def modify_tournament(self, tournament, tinydb, id):
+        print(tournament)
+        """ Modify the tournament """
+        dict_modify_tournament = {}
+        try:
+            db = tinydb.TinyDB("data/db.json")
+            table = db.table("Tournament")
+            table.update(tournament, doc_ids=[int(id)])
+            print(type(id), id)
+            dict_modify_tournament["status"] = True
+            dict_modify_tournament["function"] = f"modify_tournament() : Modify the tournament"
+        except Exception as e:
+            dict_modify_tournament["status"] = False
+            dict_modify_tournament["function"] = print(f"modify_tournament() : {e}")
+        return dict_modify_tournament
+        

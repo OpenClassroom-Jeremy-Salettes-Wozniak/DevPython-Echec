@@ -75,6 +75,9 @@ class View:
                 dict_view_retour_accueil["status"] = True
                 dict_view_retour_accueil["function"] = f"retour_accueil() : Affiche le message de retour à l'accueil"
                 dict_view_retour_accueil["choice"] = False
+                
+            dict_view_retour_accueil["status"] = True
+            dict_view_retour_accueil["function"] = f"retour_accueil() : Affiche le message de retour à l'accueil"
         except Exception as e:
             dict_view_retour_accueil["status"] = False
             dict_view_retour_accueil["function"] = print(f"retour_accueil() : {e}")
@@ -179,43 +182,81 @@ class View:
             dict_view_modifier_tournoi["function"] = print(f"demande_id() : {e}")
         return dict_view_modifier_tournoi
 
-    #TODO def modifier_tournoi(self, tournoi):
-        # """ Affiche le formulaire de modification d'un tournoi """
-        # dict_view_modifier_tournoi = {}
-        # try:
-        #     print(tournoi)
-        #     # TODO : Affiche le formulaire de modification d'un tournoi
-        #     print(f"Que voulez-vous modifier ?")
-        #     print(f"1. Nom du tournoi")
-        #     print(f"2. Lieu du tournoi")
-        #     print(f"3. Date du tournoi")
-        #     print(f"4. Description du tournoi")
-        #     print(f"5. Contrôle du temps")
-        #     print(f"6. Nombre de tours")
-        #     print(f"7. Liste des joueurs")
-        #     choice = ""
-        #     while choice not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
-        #         choice = input(f"Veuillez choisir une option : ")
-        #     if choice == "1":
-        #         pass
-        #     elif choice == "2":
-        #         pass
-        #     elif choice == "3":
-        #         pass
-        #     elif choice == "4":
-        #         pass
-        #     elif choice == "5":
-        #         pass
-        #     elif choice == "6":
-        #         pass
-        #     elif choice == "7":
-        #         pass
-        #     dict_view_modifier_tournoi["status"] = True
-        #     dict_view_modifier_tournoi["function"] = f"modifier_tournoi() : Affiche le formulaire de modification d'un tournoi"
-        # except Exception as e:
-        #     dict_view_modifier_tournoi["status"] = False
-        #     dict_view_modifier_tournoi["function"] = print(f"modifier_tournoi() : {e}")
-        # return dict_view_modifier_tournoi
+    def modifier_tournoi(self, tournoi):
+        """ Affiche le formulaire de modification d'un tournoi """
+        dict_view_modifier_tournoi = {}
+        try:
+            # TODO : Affiche le formulaire de modification d'un tournoi
+            tournament_name = tournoi["tournament_name"]
+            tournament_location = tournoi["tournament_location"]
+            tournament_date = tournoi["tournament_date"]
+            tournament_description = tournoi["tournament_description"]
+            tournament_time_control = tournoi["tournament_control_time"]
+            tournament_number_round = tournoi["tournament_number_round"]
+            tournament_instance_round = tournoi["tournament_instance_round"]
+            tournament_players = tournoi["tournament_players"]
+
+            print(f"Que voulez-vous modifier ?")
+            print(f"1. Nom du tournoi")
+            print(f"2. Lieu du tournoi")
+            print(f"3. Date du tournoi")
+            print(f"4. Description du tournoi")
+            print(f"5. Contrôle du temps")
+            print(f"6. Liste des joueurs")
+
+            choice = ""
+            while choice not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+                choice = input(f"Veuillez choisir une option : ")
+            if choice == "1":
+                tournament_name = ""
+                while tournament_name == "":
+                    tournament_name = input(f"Nom du tournoi : ")
+            elif choice == "2":
+                tournament_location = ""
+                while tournament_location == "":
+                    tournament_location = input(f"Lieu du tournoi : ")
+            elif choice == "3":
+                tournament_date = ""
+                while tournament_date == "" or not re.match(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$", tournament_date):
+                    tournament_date = input(f"Date du tournoi(DD/MM/YYYY) : ")
+            elif choice == "4":
+                tournament_description = ""
+                while tournament_description == "":
+                    tournament_description = input(f"Description du tournoi : ")
+            elif choice == "5":
+                print("Contrôle du temps : " )
+                print(" 1. Bullet (1 min + 0 sec)")
+                print(" 2. Blitz (3 min + 2 sec)")
+                print(" 3. Coup rapide (5 min + 3 sec)")
+                tournament_time_control = ""
+                while tournament_time_control not in ["1", "2", "3"]:
+                    if tournament_time_control == "1":
+                        tournament_time_control = "Bullet"
+                    elif tournament_time_control == "2":
+                        tournament_time_control = "Blitz"
+                    elif tournament_time_control == "3":
+                        tournament_time_control = "Coup rapide"
+                    tournament_time_control = input(f"Veuillez choisir une option : ")
+            elif choice == "6":
+                # TODO: Créer la fonction pour ajouter un joueur
+                pass
+
+            dict_view_modifier_tournoi["tournament"] = {
+                "tournament_name": tournament_name,
+                "tournament_location": tournament_location,
+                "tournament_date": tournament_date,
+                "tournament_description": tournament_description,
+                "tournament_control_time": tournament_time_control,
+                "tournament_number_round": tournament_number_round,
+                "tournament_instance_round": tournament_instance_round,
+                "tournament_players": tournament_players
+            }
+            dict_view_modifier_tournoi["status"] = True
+            dict_view_modifier_tournoi["function"] = f"modifier_tournoi() : Affiche le formulaire de modification d'un tournoi"
+        except Exception as e:
+            dict_view_modifier_tournoi["status"] = False
+            dict_view_modifier_tournoi["function"] = print(f"modifier_tournoi() : {e}")
+        return dict_view_modifier_tournoi
     
     #TODO:def supprimer_tournoi(self):
         # """ Affiche le formulaire de suppression d'un tournoi """
