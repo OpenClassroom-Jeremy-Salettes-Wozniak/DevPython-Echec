@@ -68,8 +68,14 @@ class Controller:
             elif gestion_tournois["choice"] == 2:
                 os.system("cls")
                 tournois = self.modifier_tournoi(tournois)
+                os.system("cls")
+                if tournois["status"] == True:
+                    self.gestion_tournois("Le tournoi a bien été modifié")
+                else:
+                    self.gestion_tournois("Le tournoi n'a pas été modifié")
             elif gestion_tournois["choice"] == 3:
                 self.delete_tournament()
+                self.gestion_tournois(f"Le tournoi a bien été supprimé")
             elif gestion_tournois["choice"] == 4:
                 os.system("cls")
                 self.view.header(self, "Afficher un tournoi | Liste des tournois")
@@ -130,8 +136,8 @@ class Controller:
                 #TODO: self.modifier_joueur()
                 pass
             elif gestion_joueur["choice"] == 3:
-                #TODO: self.delete_player()
-                pass
+                self.delete_joueur(db_player)
+                self.gestion_joueur(f"Le joueur a bien été supprimé")
             elif gestion_joueur["choice"] == 4:
                 os.system("cls")
                 self.view.header(self, "Afficher un joueur | Liste des joueurs")
@@ -151,7 +157,11 @@ class Controller:
                 # self.gestion_joueur("Le joueur a bien été modifié")
             elif gestion_joueur["choice"] == 5:
                 self.afficher_tous_joueurs(db_player["players"])
-                self.view.retour_accueil(self)
+                accueil = self.view.retour_accueil(self)
+                if accueil["choice"] == 1:
+                    self.run()
+                else:
+                    exit()
             elif gestion_joueur["choice"] == 6:
                 self.run()
         except Exception as e:
@@ -291,10 +301,11 @@ class Controller:
             dict_controller_modifier_tournoi["function"] = print(f"modifier_tournoi() : error{e}")
         return dict_controller_modifier_tournoi
         
-    def delete_tournament(self):
+    def delete_tournament(self, db_player):
         """ Delete a tournament """
         dict_controller_delete_tournament = {}
         try:
+            print("db_player", db_player)
             self.view.header(self, "Supprimer un tournoi")
             afficher_tournois = self.afficher_tous_tournois(self.tournament.get_table_tournaments(self, tinydb))
             self.view.footer(self)
@@ -352,16 +363,23 @@ class Controller:
         #     dict_controller_modifier_joueur["function"] = print(f"modifier_joueur() : error{e}")
         # return dict_controller_modifier_joueur
 
-    #TODO:def delete_joueur(self):
-        # """ Delete a player """
-        # dict_controller_delete_joueur = {}
-        # try:
-        #     print("delete_joueur")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_delete_joueur["status"] = False
-        #     dict_controller_delete_joueur["function"] = print(f"delete_joueur() : error{e}")
-        # return dict_controller_delete_joueur
+    def delete_joueur(self , db_player):
+        """ Delete a player """
+        dict_controller_delete_joueur = {}
+        try:
+            self.view.header(self, "Supprimer un joueur")
+            list_id = self.afficher_tous_joueurs(db_player["players"])
+            self.view.footer(self)
+            demande_id_joueur = self.view.demande_id_joueur(self, list_id["tableau_id"])
+            print("demande_id_joueur", demande_id_joueur)
+            self.player.delete_player(self, tinydb, demande_id_joueur["joueur_id"])
+            dict_controller_delete_joueur["status"] = True
+            dict_controller_delete_joueur["function"] = f"delete_joueur() : Delete a player"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_delete_joueur["status"] = False
+            dict_controller_delete_joueur["function"] = print(f"delete_joueur() : error{e}")
+        return dict_controller_delete_joueur
 
 
     def afficher_tous_joueurs(self, players):

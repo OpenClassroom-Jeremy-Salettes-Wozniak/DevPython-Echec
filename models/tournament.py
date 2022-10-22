@@ -141,14 +141,12 @@ class Tournament:
         return dict_delete_tournament
 
     def modify_tournament(self, tournament, tinydb, id):
-        print(tournament)
         """ Modify the tournament """
         dict_modify_tournament = {}
         try:
             db = tinydb.TinyDB("data/db.json")
             table = db.table("Tournament")
             table.update(tournament, doc_ids=[int(id)])
-            print(type(id), id)
             dict_modify_tournament["status"] = True
             dict_modify_tournament["function"] = f"modify_tournament() : Modify the tournament"
         except Exception as e:
