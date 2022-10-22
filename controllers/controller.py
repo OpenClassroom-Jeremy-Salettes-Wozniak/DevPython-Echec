@@ -116,6 +116,7 @@ class Controller:
         dict_controller_gestion_joueur = {}
         try:
             os.system("cls")
+            db_player = self.player.get_table_players(self, tinydb)
             self.view.header(self, "Gestion des joueurs")
             if message:
                 message = message[0]
@@ -132,10 +133,23 @@ class Controller:
                 #TODO: self.delete_player()
                 pass
             elif gestion_joueur["choice"] == 4:
-                #TODO: self.afficher_joueur()
-                pass
+                os.system("cls")
+                self.view.header(self, "Afficher un joueur | Liste des joueurs")
+                afficher_tous_joueurs = self.afficher_tous_joueurs(db_player["players"])
+                self.view.footer(self)
+                demande_id_joueur = self.view.demande_id_joueur(self, afficher_tous_joueurs["tableau_id"])
+                joueur = self.player.get_table_player(self, tinydb, demande_id_joueur["joueur_id"])
+                os.system("cls")
+                self.view.header(self, "Afficher un joueur | Joueur")
+                self.afficher_joueur(joueur["players"], demande_id_joueur["joueur_id"])
+                self.view.footer(self)
+                retour_accueil = self.view.retour_accueil(self)
+                if retour_accueil["choice"] == 1:
+                        self.run()
+                else:
+                    exit()
+                # self.gestion_joueur("Le joueur a bien été modifié")
             elif gestion_joueur["choice"] == 5:
-                db_player = self.player.get_table_players(self, tinydb)
                 self.afficher_tous_joueurs(db_player["players"])
                 self.view.retour_accueil(self)
             elif gestion_joueur["choice"] == 6:
@@ -326,8 +340,7 @@ class Controller:
             dict_controller_creer_joueur["status"] = False
             dict_controller_creer_joueur["function"] = print(f"creer_joueur() : error{e}")
         return dict_controller_creer_joueur 
-    def passa(self):
-        pass
+
     #TODO:def modifier_joueur(self):
         # """ Modify a player """
         # dict_controller_modifier_joueur = {}
@@ -350,28 +363,7 @@ class Controller:
         #     dict_controller_delete_joueur["function"] = print(f"delete_joueur() : error{e}")
         # return dict_controller_delete_joueur
 
-    #TODO:def afficher_joueur(self):
-        # """ Display a player """
-        # dict_controller_afficher_joueur = {}
-        # try:
-        #     print("afficher_joueur")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_afficher_joueur["status"] = False
-        #     dict_controller_afficher_joueur["function"] = print(f"afficher_joueur() : error{e}")
-        # return dict_controller_afficher_joueur
 
-    #TODO:def afficher_tous_joueurs(self):
-        # """ Display all players """
-        # dict_controller_afficher_tous_joueurs = {}
-        # try:
-        #     print("afficher_tous_joueurs")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_afficher_tous_joueurs["status"] = False
-        #     dict_controller_afficher_tous_joueurs["function"] = print(f"afficher_tous_joueurs() : error{e}")
-        # return dict_controller_afficher_tous_joueurs
-    
     def afficher_tous_joueurs(self, players):
         """ 
         Get all players 
@@ -384,7 +376,7 @@ class Controller:
             tableau_id = []
             for player in all_players:
                 player_id = player.doc_id
-                tableau_id.append(player_id)
+                tableau_id.append(str(player_id))
                 prettytable_players.add_row([
                     player_id,
                     player["player_last_name"],
@@ -404,30 +396,32 @@ class Controller:
             dict_controller_all_players["function"] = print(f"all_players() : error{e}")
         return dict_controller_all_players
 
-    #TODO:def table_player(self, player, id):
-        # """ Get all player """
-        # dict_controller_all_player = {}
-        # try:
-        #     prettytable_player = prettytable.PrettyTable()
-        #     prettytable_player.field_names = ["ID", "Nom", "Prénom", "Date de naissance", "Sexe", "Classement"]
-        #     prettytable_player.add_row([
-        #         id,
-        #         player["player_last_name"],
-        #         player["player_first_name"],
-        #         player["date_of_birth"],
-        #         player["sexe"],
-        #         player["ranking"]
-        #     ])
-        #     print(prettytable_player)
-        #     # DICTIONNAIRE
-        #     dict_controller_all_player["status"] = True
-        #     dict_controller_all_player["function"] = f"all_player() : Get all player"
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_all_player["status"] = False
-        #     dict_controller_all_player["function"] = print(f"all_player() : error{e}")
+    def afficher_joueur(self, player, id):
+        """ Get all player """
+        dict_controller_all_player = {}
+        try:
+            prettytable_player = prettytable.PrettyTable()
+            prettytable_player.field_names = ["ID", "Nom", "Prénom", "Date de naissance", "Sexe", "Classement"]
+            prettytable_player.add_row([
+                id,
+                player["player_last_name"],
+                player["player_first_name"],
+                player["date_of_birth"],
+                player["sexe"],
+                player["ranking"]
+            ])
+            print(prettytable_player)
+            # DICTIONNAIRE
+            dict_controller_all_player["status"] = True
+            dict_controller_all_player["function"] = f"all_player() : Get all player"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_all_player["status"] = False
+            dict_controller_all_player["function"] = print(f"all_player() : error{e}")
+
 
 # TODO: RAPPORTS
+
     #TODO:def rapport_tournoi(self):
         # """ Report a tournament """
         # dict_controller_rapport_tournoi = {}

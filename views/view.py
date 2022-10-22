@@ -257,51 +257,6 @@ class View:
             dict_view_modifier_tournoi["status"] = False
             dict_view_modifier_tournoi["function"] = print(f"modifier_tournoi() : {e}")
         return dict_view_modifier_tournoi
-    
-    #TODO:def supprimer_tournoi(self):
-        # """ Affiche le formulaire de suppression d'un tournoi """
-        # dict_view_supprimer_tournoi = {}
-        # try:
-        #     print("Etes-vous sûr de vouloir supprimer ce tournoi ?")
-        #     print(f"1. Oui")
-        #     print(f"2. Non")
-        #     choice = ""
-        #     while choice not in ["1", "2"]:
-        #         choice = input(f"Veuillez choisir une option : ")
-        #     if choice == "1":
-        #         dict_view_supprimer_tournoi["status"] = True
-        #         message = f"Le tournoi a bien été supprimé"
-        #     elif choice == "2":
-        #         dict_view_supprimer_tournoi["status"] = False
-        #         message = "Vous avez annulé la suppression du tournoi"
-        #     dict_view_supprimer_tournoi["function"] = f"supprimer_tournoi() : Affiche le formulaire de suppression d'un tournoi"
-        # except Exception as e:
-        #     dict_view_supprimer_tournoi["status"] = False
-        #     dict_view_supprimer_tournoi["function"] = print(f"supprimer_tournoi() : {e}")
-
-    #TODO:def afficher_tournoi(self, tournoi):
-        # """ Affiche le tournoi """
-        # dict_view_afficher_tournoi = {}
-        # try:
-        #     print(tournoi)
-        #     dict_view_afficher_tournoi["status"] = True
-        #     dict_view_afficher_tournoi["function"] = f"afficher_tournoi() : Affiche le tournoi"
-        # except Exception as e:
-        #     dict_view_afficher_tournoi["status"] = False
-        #     dict_view_afficher_tournoi["function"] = print(f"afficher_tournoi() : {e}")
-        # return dict_view_afficher_tournoi
-
-    #TODO:def afficher_tous_les_tournois(self, tournois):
-        # """ Affiche tous les tournois """
-        # dict_view_afficher_tous_les_tournois = {}
-        # try:
-        #     print(tournois)
-        #     dict_view_afficher_tous_les_tournois["status"] = True
-        #     dict_view_afficher_tous_les_tournois["function"] = f"afficher_tous_les_tournois() : Affiche tous les tournois"
-        # except Exception as e:
-        #     dict_view_afficher_tous_les_tournois["status"] = False
-        #     dict_view_afficher_tous_les_tournois["function"] = print(f"afficher_tous_les_tournois() : {e}")
-        # return dict_view_afficher_tous_les_tournois
 
 #TODO: VIEWS JOUEURS
     def gestion_joueur(self, *message):
@@ -370,18 +325,20 @@ class View:
             dict_view_creer_joueur["function"] = print(f"creer_joueur() : {e}")
         return dict_view_creer_joueur
 
-    #TODO:def demande_id_joueur(self):
-        # """ Demande l'id du joueur """
-        # dict_view_demande_id_joueur = {}
-        # try:
-        #     id_joueur = input(f"Veuillez saisir l'id du joueur : ")
-        #     dict_view_demande_id_joueur["status"] = True
-        #     dict_view_demande_id_joueur["function"] = f"demande_id_joueur() : Demande l'id du joueur"
-        #     dict_view_demande_id_joueur["id_joueur"] = id_joueur
-        # except Exception as e:
-        #     dict_view_demande_id_joueur["status"] = False
-        #     dict_view_demande_id_joueur["function"] = print(f"demande_id_joueur() : {e}")
-        # return dict_view_demande_id_joueur
+    def demande_id_joueur(self, list_id_joueur):
+        """ Demande à l'utilisateur de saisir l'id d'un joueur """
+        dict_view_demande_id_joueur = {}
+        try:
+            id_joueur = ""
+            while id_joueur not in list_id_joueur:
+                id_joueur = input(f"Veuillez saisir l'id du joueur : ")
+            dict_view_demande_id_joueur["status"] = True
+            dict_view_demande_id_joueur["function"] = f"demande_id_joueur() : Demande l'id du joueur"
+            dict_view_demande_id_joueur["joueur_id"] = id_joueur
+        except Exception as e:
+            dict_view_demande_id_joueur["status"] = False
+            dict_view_demande_id_joueur["function"] = print(f"demande_id_joueur() : {e}")
+        return dict_view_demande_id_joueur
 
     #TODO:def modifier_joueur(self):
         # """ Affiche le formulaire de modification d'un joueur """
