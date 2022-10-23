@@ -133,8 +133,7 @@ class Controller:
                 self.creer_joueur()
                 self.gestion_joueur("Le joueur a bien été créé")
             elif gestion_joueur["choice"] == 2:
-                #TODO: self.modifier_joueur()
-                pass
+                self.modifier_joueur()
             elif gestion_joueur["choice"] == 3:
                 self.delete_joueur(db_player)
                 self.gestion_joueur(f"Le joueur a bien été supprimé")
@@ -154,7 +153,6 @@ class Controller:
                         self.run()
                 else:
                     exit()
-                # self.gestion_joueur("Le joueur a bien été modifié")
             elif gestion_joueur["choice"] == 5:
                 self.afficher_tous_joueurs(db_player["players"])
                 accueil = self.view.retour_accueil(self)
@@ -352,16 +350,29 @@ class Controller:
             dict_controller_creer_joueur["function"] = print(f"creer_joueur() : error{e}")
         return dict_controller_creer_joueur 
 
-    #TODO:def modifier_joueur(self):
-        # """ Modify a player """
-        # dict_controller_modifier_joueur = {}
-        # try:
-        #     print("modifier_joueur")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_modifier_joueur["status"] = False
-        #     dict_controller_modifier_joueur["function"] = print(f"modifier_joueur() : error{e}")
-        # return dict_controller_modifier_joueur
+    def modifier_joueur(self):
+        """ Modify a player """
+        dict_controller_modifier_joueur = {}
+        try:
+            db_player = self.player.get_table_players(self, tinydb)
+            self.view.header(self, "Modifier un joueur | Liste des joueurs")
+            afficher_joueurs = self.afficher_tous_joueurs(db_player["players"])
+            self.view.footer(self)
+            demande_id_joueur = self.view.demande_id_joueur(self, afficher_joueurs["tableau_id"])
+            joueur = self.player.get_table_player(self, tinydb, demande_id_joueur["joueur_id"])
+            self.view.header(self, "Modifier un joueur | Joueur")
+            self.afficher_joueur(joueur["players"], demande_id_joueur["joueur_id"])
+            self.view.footer(self)
+            nouveau_joueur = self.view.modifier_joueur(self, joueur["players"])
+            self.player.modify_player(self, nouveau_joueur["player"], tinydb, demande_id_joueur["joueur_id"])
+            self.gestion_joueur("Le joueur a été modifié")
+            dict_controller_modifier_joueur["status"] = True
+            dict_controller_modifier_joueur["function"] = f"modifier_joueur() : Modify a player"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_modifier_joueur["status"] = False
+            dict_controller_modifier_joueur["function"] = print(f"modifier_joueur() : error{e}")
+        return dict_controller_modifier_joueur
 
     def delete_joueur(self , db_player):
         """ Delete a player """
@@ -380,7 +391,6 @@ class Controller:
             dict_controller_delete_joueur["status"] = False
             dict_controller_delete_joueur["function"] = print(f"delete_joueur() : error{e}")
         return dict_controller_delete_joueur
-
 
     def afficher_tous_joueurs(self, players):
         """ 

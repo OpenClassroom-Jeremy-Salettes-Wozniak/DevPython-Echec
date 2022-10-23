@@ -1,5 +1,7 @@
 import re
 
+from models.player import Player
+
 
 class View:
     """ View class """
@@ -340,65 +342,57 @@ class View:
             dict_view_demande_id_joueur["function"] = print(f"demande_id_joueur() : {e}")
         return dict_view_demande_id_joueur
 
-    #TODO:def modifier_joueur(self):
-        # """ Affiche le formulaire de modification d'un joueur """
-        # dict_view_modifier_joueur = {}
-        # try:
-        #     nom = input(f"Veuillez saisir le nom du joueur : ")
-        #     while nom == "":
-        #         nom = input(f"Veuillez saisir le nom du joueur : ")
-        #     prenom = input(f"Veuillez saisir le prénom du joueur : ")
-        #     while prenom == "":
-        #         prenom = input(f"Veuillez saisir le prénom du joueur : ")
-        #     date_de_naissance = input(f"Veuillez saisir la date de naissance du joueur (jj/mm/aaaa) : ")
-        #     while date_de_naissance == "" or len(date_de_naissance) != 10:
-        #         date_de_naissance = input(f"Veuillez saisir la date de naissance du joueur (jj/mm/aaaa) : ")
-        #     sexe = input(f"Veuillez saisir le sexe du joueur (M ou F)")
-        #     while sexe == "" or sexe not in ["M", "F"]:
-        #         sexe = input(f"Veuillez saisir le sexe du joueur (M ou F)")
-        #     dict_view_modifier_joueur["status"] = True
-        #     dict_view_modifier_joueur["function"] = f"modifier_joueur() : Affiche le formulaire de modification d'un joueur"
-        #     dict_view_modifier_joueur["nom"] = nom
-        #     dict_view_modifier_joueur["prenom"] = prenom
-        #     dict_view_modifier_joueur["date_de_naissance"] = date_de_naissance
-        #     dict_view_modifier_joueur["sexe"] = sexe
-        # except Exception as e:
-        #     dict_view_modifier_joueur["status"] = False
-        #     dict_view_modifier_joueur["function"] = print(f"modifier_joueur() : {e}")
-        # return dict_view_modifier_joueur
+    def modifier_joueur(self, player):
+        """ Affiche le formulaire de modification d'un joueur """
+        dict_view_modifier_joueur = {}
+        try:
+            player_name = player["player_first_name"]
+            player_last_name = player["player_last_name"]
+            player_date_of_birth = player["date_of_birth"]
+            player_sexe = player["sexe"]
+            ranking = player["ranking"]
 
-    #TODO:def delete_joueur(self):
-        # """ Affiche le formulaire de suppression d'un joueur """
-        # dict_view_delete_joueur = {}
-        # try:
-        #     dict_view_delete_joueur["status"] = True
-        #     dict_view_delete_joueur["function"] = f"delete_joueur() : Affiche le formulaire de suppression d'un joueur"
-        # except Exception as e:
-        #     dict_view_delete_joueur["status"] = False
-        #     dict_view_delete_joueur["function"] = print(f"delete_joueur() : {e}")
-        # return dict_view_delete_joueur
-        
-    #TODO:def afficher_tous_les_joueurs(self):
-        # """ Affiche tous les joueurs """
-        # dict_view_afficher_tous_les_joueurs = {}
-        # try:
-        #     dict_view_afficher_tous_les_joueurs["status"] = True
-        #     dict_view_afficher_tous_les_joueurs["function"] = f"afficher_tous_les_joueurs() : Affiche tous les joueurs"
-        # except Exception as e:
-        #     dict_view_afficher_tous_les_joueurs["status"] = False
-        #     dict_view_afficher_tous_les_joueurs["function"] = print(f"afficher_tous_les_joueurs() : {e}")
-        # return dict_view_afficher_tous_les_joueurs
+            choice = ""
+            while choice not in ["1", "2", "3", "4", "5", "6"]:
+                print(f"1. Modifier le nom du joueur : {player_name}")
+                print(f"2. Modifier le prénom du joueur : {player_last_name}")
+                print(f"3. Modifier la date de naissance du joueur : {player_date_of_birth}")
+                print(f"4. Modifier le sexe du joueur : {player_sexe}")
+                print(f"5. Modifier le classement du joueur : {ranking}")
+                print(f"6. Retour au menu précédent")
+                self.view.footer(self)
+                choice = input(f"Veuillez choisir une option : ")
 
-    #TODO:def afficher_joueur(self):
-        # """ Affiche un joueur """
-        # dict_view_afficher_joueur = {}
-        # try:
-        #     dict_view_afficher_joueur["status"] = True
-        #     dict_view_afficher_joueur["function"] = f"afficher_joueur() : Affiche un joueur"
-        # except Exception as e:
-        #     dict_view_afficher_joueur["status"] = False
-        #     dict_view_afficher_joueur["function"] = print(f"afficher_joueur() : {e}")
-        # return dict_view_afficher_joueur
+            if choice == "1":
+                player_name = input(f"Veuillez saisir le nom du joueur : ")
+                while player_name == "":
+                    player_name = input(f"Veuillez saisir le nom du joueur : ")
+            elif choice == "2":
+                player_last_name = input(f"Veuillez saisir le prénom du joueur : ")
+                while player_last_name == "":
+                    player_last_name = input(f"Veuillez saisir le prénom du joueur : ")
+            elif choice == "3":
+                player_date_of_birth = input(f"Veuillez saisir la date de naissance du joueur (jj/mm/aaaa) : ")
+                while player_date_of_birth == "" or not re.match(r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/([0-9]{4})$", player_date_of_birth):
+                    player_date_of_birth = input(f"Veuillez saisir la date de naissance du joueur (jj/mm/aaaa) : ")
+            elif choice == "4":
+                player_sexe = input(f"Veuillez saisir le sexe du joueur (M ou F) : ")
+                while player_sexe == "" or player_sexe not in ["M", "F"]:
+                    player_sexe = input(f"Veuillez saisir le sexe du joueur (M ou F)")
+            dict_view_modifier_joueur["status"] = True
+            dict_view_modifier_joueur["function"] = f"modifier_joueur() : Affiche le formulaire de modification d'un joueur"
+            dict_view_modifier_joueur["choice"] = int(choice)
+            dict_view_modifier_joueur["player"] = {
+                "player_first_name": player_name,
+                "player_last_name": player_last_name,
+                "date_of_birth": player_date_of_birth,
+                "sexe": player_sexe,
+                "ranking": ranking
+            }
+        except Exception as e:
+            dict_view_modifier_joueur["status"] = False
+            dict_view_modifier_joueur["function"] = print(f"modifier_joueur() : {e}")
+        return dict_view_modifier_joueur
 
 # TODO: VIEWS RAPPORTS
 

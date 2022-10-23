@@ -113,3 +113,20 @@ class Player:
             dict_delete_player["status"] = False
             dict_delete_player["function"] = print(f"delete_player() : {e}")
         return dict_delete_player
+
+    def modify_player(self, player, tinydb, player_id):
+        """ Modify a player """
+        dict_modify_player = {}
+        try:
+            # Créer une instance de TinyDB
+            db = tinydb.TinyDB("data/db.json")
+            # Créer une instance de la table Tournament
+            table = db.table("players")
+            # Récupérer tous les tournois
+            table.update(player, doc_ids=[int(player_id)])
+            dict_modify_player["status"] = True
+            dict_modify_player["function"] = f"modify_player() : Modify a player"
+        except Exception as e:
+            dict_modify_player["status"] = False
+            dict_modify_player["function"] = print(f"modify_player() : {e}")
+        return dict_modify_player
