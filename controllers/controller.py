@@ -347,7 +347,7 @@ class Controller:
                 print(tournoi)
                 self.ajouter_joueurs_tournoi(tournoi["tournament"])
             elif choice_menu_tournoi["choice"] == "2":
-                self.supprimer_joueurs_tournoi()
+                self.supprimer_joueurs_tournoi(tournoi["tournament"])
             elif choice_menu_tournoi["choice"] == "3":
                 # SI LE NOMBRE DE JOUEURS EST INFERIEUR A 8
                 if len(tournoi["tournament"]["tournament_players"]) < 8:
@@ -404,8 +404,40 @@ class Controller:
             dict_controller_ajouter_joueurs_tournoi["status"] = False
             dict_controller_ajouter_joueurs_tournoi["function"] = print(f"ajouter_joueurs_tournoi() : error{e}")
 
-    #TODO: def supprimer_joueurs_tournoi(self):
-        # pass
+    def supprimer_joueurs_tournoi(self, tournament):
+        """ Delete players to a tournament """
+        dict_controller_supprimer_joueurs_tournoi = {}
+        try:
+            os.system("cls")
+            self.view.header(self, "Lancement du tournois | Supprimer un joueurs")
+            # Recupere la liste des joueurs du tournoi
+            list_players_tournament = tournament["tournament_players"]
+            print(list_players_tournament)
+            # Supprime le joueur selectionné à la liste des joueurs du tournoi
+            if list_players_tournament != []:
+                demande_id_joueur = self.view.demande_id_joueur(self, list_players_tournament)
+                list_players_tournament.remove(demande_id_joueur["joueur_id"])
+            else:
+                print("Il n'y a pas de joueurs dans ce tournoi")
+                input("Appuyer sur une touche pour continuer")
+                self.gestion_tournois()
+            tournoi = {
+                "tournament_name": tournament["tournament_name"],
+                "tournament_location": tournament["tournament_location"],
+                "tournament_date": tournament["tournament_date"],
+                "tournament_number_round": tournament["tournament_number_round"],
+                "tournament_instance_round": tournament["tournament_instance_round"],
+                "tournament_players" : list_players_tournament,
+                "tournament_control_time": tournament["tournament_control_time"],
+                "tournament_description": tournament["tournament_description"],
+            }
+            self.tournament.add_player_tournament(self, tinydb, tournament.doc_id, tournoi)
+            dict_controller_supprimer_joueurs_tournoi["status"] = True
+            dict_controller_supprimer_joueurs_tournoi["function"] = f"supprimer_joueurs_tournoi() : Delete players to a tournament"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_supprimer_joueurs_tournoi["status"] = False
+            dict_controller_supprimer_joueurs_tournoi["function"] = print(f"supprimer_joueurs_tournoi() : error{e}")
 
     #TODO: def tournoi_lancer(self):
         # pass
