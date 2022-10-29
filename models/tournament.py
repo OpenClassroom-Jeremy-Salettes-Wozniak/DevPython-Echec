@@ -166,9 +166,6 @@ class Tournament:
             table = db.table("Tournament")
             # Ajouter le joueur dans le tournoi
             table.update(tournament, doc_ids=[int(id)])
-            
-
-
             dict_add_player_tournament["status"] = True
             dict_add_player_tournament["function"] = f"add_player_tournament() : Add a player in the tournament"
         except Exception as e:

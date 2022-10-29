@@ -344,10 +344,11 @@ class Controller:
 
             if choice_menu_tournoi["choice"] == "1":
                 # LANCER LE TOURNOI
-                print(tournoi)
                 self.ajouter_joueurs_tournoi(tournoi["tournament"])
+                self.gestion_tournois("Joueurs ajoutés au tournoi")
             elif choice_menu_tournoi["choice"] == "2":
                 self.supprimer_joueurs_tournoi(tournoi["tournament"])
+                # self.gestion_tournois("Joueurs supprimés du tournoi")
             elif choice_menu_tournoi["choice"] == "3":
                 # SI LE NOMBRE DE JOUEURS EST INFERIEUR A 8
                 if len(tournoi["tournament"]["tournament_players"]) < 8:
@@ -412,7 +413,10 @@ class Controller:
             self.view.header(self, "Lancement du tournois | Supprimer un joueurs")
             # Recupere la liste des joueurs du tournoi
             list_players_tournament = tournament["tournament_players"]
-            print(list_players_tournament)
+            # Affiche la liste des joueurs du tournoi
+            self.afficher_joueurs_tournoi(tournament, tournament.doc_id)
+            self.view.footer(self)
+
             # Supprime le joueur selectionné à la liste des joueurs du tournoi
             if list_players_tournament != []:
                 demande_id_joueur = self.view.demande_id_joueur(self, list_players_tournament)
@@ -561,7 +565,31 @@ class Controller:
             dict_controller_all_player["status"] = False
             dict_controller_all_player["function"] = print(f"all_player() : error{e}")
 
-
+    def afficher_joueurs_tournoi(self, tournoi, id):
+        """ Get all player """
+        dict_controller_all_player = {}
+        try:
+            # Recupération des joueurs du tournoi
+            id_joueurs_tournoi = tournoi["tournament_players"]
+            for id_joueur in id_joueurs_tournoi:
+                joueur = self.player.get_table_player(self, tinydb, id_joueur)
+                prettytable_player = prettytable.PrettyTable()
+                prettytable_player.field_names = ["ID", "Nom", "Prénom", "Date de naissance", "Sexe", "Classement"]
+                prettytable_player.add_row([
+                    id_joueur,
+                    joueur["players"]["player_last_name"],
+                    joueur["players"]["player_first_name"],
+                    joueur["players"]["date_of_birth"],
+                    joueur["players"]["sexe"],
+                    joueur["players"]["ranking"]
+                ])
+                print(prettytable_player)
+            dict_controller_all_player["status"] = True
+            dict_controller_all_player["function"] = f"all_player_tournoi() : Get all player"
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_all_player["status"] = False
+            dict_controller_all_player["function"] = print(f"all_player_tournoi() : error{e}")
 # TODO: RAPPORTS
 
     #TODO:def rapport_tournoi(self):
