@@ -1,3 +1,4 @@
+import time
 import tinydb
 import os
 import prettytable
@@ -74,7 +75,7 @@ class Controller:
                 else:
                     self.gestion_tournois("Le tournoi n'a pas été modifié")
             elif gestion_tournois["choice"] == 3:
-                self.delete_tournament()
+                self.delete_tournament(tournois)
                 self.gestion_tournois(f"Le tournoi a bien été supprimé")
             elif gestion_tournois["choice"] == 4:
                 os.system("cls")
@@ -104,8 +105,7 @@ class Controller:
                 else:
                     exit()
             elif gestion_tournois["choice"] == 6:
-                #TODO:self.lancer_tournoi()
-                pass
+                self.lancer_tournoi()
             elif gestion_tournois["choice"] == 7:
                 self.run()
             # DICTIONNAIRE
@@ -317,16 +317,98 @@ class Controller:
             dict_controller_delete_tournament["function"] = print(f"delete_tournament() : error{e}")
         return dict_controller_delete_tournament
 
-    #TODO:def lancer_tournoi(self):
-        # """ Start a tournament """
-        # dict_controller_lancer_tournoi = {}
-        # try:
-        #     print("lancer_tournoi")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_lancer_tournoi["status"] = False
-        #     dict_controller_lancer_tournoi["function"] = print(f"lancer_tournoi() : error{e}")
-        # return dict_controller_lancer_tournoi
+    def lancer_tournoi(self):
+        """ Start a tournament """
+        dict_controller_lancer_tournoi = {}
+        try:
+            # SELECTION DU TOURNOI
+            os.system("cls")
+            self.view.header(self, "Lancement du tournois | Sélection du tournoi")
+            afficher_tournois = self.afficher_tous_tournois(self.tournament.get_table_tournaments(self, tinydb))
+            self.view.footer(self)
+            if afficher_tournois["list_id_tournament"] == []:
+                print("Aucun tournoi à lancer")
+                input("Appuyer sur une touche pour continuer")
+                self.gestion_tournois()
+            demande_id_tournoi = self.view.demande_id_tournoi(self, afficher_tournois["list_id_tournament"])
+            # AFFICHAGE DU TOURNOI
+            os.system("cls")
+            self.view.header(self, f"Lancement du tournois | Tournoi sélectionné : {demande_id_tournoi['tournament_id']}")
+            tournoi = self.tournament.get_table_tournament(self, tinydb, demande_id_tournoi["tournament_id"])
+            self.afficher_tournoi(tournoi["tournament"], demande_id_tournoi["tournament_id"])
+            self.view.footer(self)
+            #AFFICHAGE DU MENU DU TOURNOI
+            os.system("cls")
+            self.view.header(self, f"Lancement du tournois | Menu du tournoi")
+            choice_menu_tournoi = self.view.menu_tournoi(self, demande_id_tournoi["tournament_id"])
+
+            if choice_menu_tournoi["choice"] == "1":
+                # LANCER LE TOURNOI
+                print(tournoi)
+                self.ajouter_joueurs_tournoi(tournoi["tournament"])
+            elif choice_menu_tournoi["choice"] == "2":
+                self.supprimer_joueurs_tournoi()
+            elif choice_menu_tournoi["choice"] == "3":
+                # SI LE NOMBRE DE JOUEURS EST INFERIEUR A 8
+                if len(tournoi["tournament"]["tournament_players"]) < 8:
+                    print("Il faut au minimum 8 joueurs pour lancer le tournoi")
+                    # Attendre 3 secondes
+                    time.sleep(3)
+                    self.lancer_tournoi()
+                else:
+                    self.tournoi_lancer()
+            elif choice_menu_tournoi["choice"] == "4":
+                self.gestion_tournois()
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_lancer_tournoi["status"] = False
+            dict_controller_lancer_tournoi["function"] = print(f"lancer_tournoi() : error{e}")
+        return dict_controller_lancer_tournoi
+
+    def ajouter_joueurs_tournoi(self, tournament):
+        """ Add players to a tournament """
+        dict_controller_ajouter_joueurs_tournoi = {}
+        try:
+            # SELECTION DU TOURNOI
+            os.system("cls")
+            self.view.header(self, "Lancement du tournois | Ajouter un joueurs")
+            db_player = self.player.get_table_players(self, tinydb)
+            afficher_joueurs = self.afficher_tous_joueurs(db_player["players"])
+            self.view.footer(self)
+            demande_id_joueur = self.view.demande_id_joueur(self, afficher_joueurs["tableau_id"])
+            # Recupere la liste des joueurs du tournoi
+            list_players_tournament = tournament["tournament_players"]
+            # Ajoute le joueur selectionné à la liste des joueurs du tournoi
+            if demande_id_joueur["joueur_id"] not in list_players_tournament:
+                list_players_tournament.append(demande_id_joueur["joueur_id"])
+            else:
+                print("Ce joueur est déjà dans le tournoi")
+                input("Appuyer sur une touche pour continuer")
+                self.gestion_tournois()
+            tournoi = {
+                "tournament_name": tournament["tournament_name"],
+                "tournament_location": tournament["tournament_location"],
+                "tournament_date": tournament["tournament_date"],
+                "tournament_number_round": tournament["tournament_number_round"],
+                "tournament_instance_round": tournament["tournament_instance_round"],
+                "tournament_players" : list_players_tournament,
+                "tournament_control_time": tournament["tournament_control_time"],
+                "tournament_description": tournament["tournament_description"],
+            }
+            self.tournament.add_player_tournament(self, tinydb, tournament.doc_id, tournoi)
+            dict_controller_ajouter_joueurs_tournoi["status"] = True
+            dict_controller_ajouter_joueurs_tournoi["function"] = f"ajouter_joueurs_tournoi() : Add players to a tournament"
+
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_ajouter_joueurs_tournoi["status"] = False
+            dict_controller_ajouter_joueurs_tournoi["function"] = print(f"ajouter_joueurs_tournoi() : error{e}")
+
+    #TODO: def supprimer_joueurs_tournoi(self):
+        # pass
+
+    #TODO: def tournoi_lancer(self):
+        # pass
 
 # TODO: JOUEURS
     def creer_joueur(self):

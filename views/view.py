@@ -260,6 +260,27 @@ class View:
             dict_view_modifier_tournoi["function"] = print(f"modifier_tournoi() : {e}")
         return dict_view_modifier_tournoi
 
+    def menu_tournoi(self, tournoi):
+        """ Affiche le menu du tournoi """
+        dict_view_menu_tournoi = {}
+        try:
+            # TODO : Affiche le menu du tournoi
+            print(f"1. Ajouter un joueurs au tournoi")
+            print(f"2. Supprimer un joueurs du tournoi")
+            print(f"3. Lancer le tournoi")
+            print(f"4. Retour au menu principal")
+            self.view.footer(self)
+            choice = ""
+            while choice not in ["1", "2", "3", "4"]:
+                choice = input(f"Veuillez choisir une option : ")
+            dict_view_menu_tournoi["choice"] = choice
+            dict_view_menu_tournoi["status"] = True
+            dict_view_menu_tournoi["function"] = f"menu_tournoi() : Affiche le menu du tournoi"
+        except Exception as e:
+            dict_view_menu_tournoi["status"] = False
+            dict_view_menu_tournoi["function"] = print(f"menu_tournoi() : {e}")
+        return dict_view_menu_tournoi
+
 #TODO: VIEWS JOUEURS
     def gestion_joueur(self, *message):
         """ Affiche le menu de gestion des joueurs """

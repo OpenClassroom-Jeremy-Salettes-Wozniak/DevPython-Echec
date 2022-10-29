@@ -95,6 +95,10 @@ class Tournament:
             table = db.table("Tournament")
             # Récupérer tous les tournois
             all_tournaments = table.all()
+            if all_tournaments == []:
+                dict_get_all_tournament["status"] = False
+                dict_get_all_tournament["message"] = "No tournament"
+                dict_get_all_tournament["function"] = "get_table_tournaments() : Return all tournament"
             dict_get_all_tournament["status"] = True
             dict_get_all_tournament["function"] = f"get_all_tournaments() : Return all tournament"
             dict_get_all_tournament["tournaments"] = all_tournaments
@@ -154,3 +158,20 @@ class Tournament:
             dict_modify_tournament["function"] = print(f"modify_tournament() : {e}")
         return dict_modify_tournament
         
+    def add_player_tournament(self, tinydb, id, tournament):
+        """ Add a player in the tournament """
+        dict_add_player_tournament = {}
+        try:
+            db = tinydb.TinyDB("data/db.json")
+            table = db.table("Tournament")
+            # Ajouter le joueur dans le tournoi
+            table.update(tournament, doc_ids=[int(id)])
+            
+
+
+            dict_add_player_tournament["status"] = True
+            dict_add_player_tournament["function"] = f"add_player_tournament() : Add a player in the tournament"
+        except Exception as e:
+            dict_add_player_tournament["status"] = False
+            dict_add_player_tournament["function"] = print(f"add_player_tournament() : {e}")
+        return dict_add_player_tournament
