@@ -1,8 +1,8 @@
-import time
+from time import time
 import tinydb
 import os
 import prettytable
-
+import datetime
 from models.tournament import Tournament
 class Controller:
     """ Main class of the application """
@@ -167,17 +167,6 @@ class Controller:
             dict_controller_gestion_joueur["status"] = False
             dict_controller_gestion_joueur["function"] = print(f"gestion_joueur() : error{e}")
         return dict_controller_gestion_joueur
-
-    #TODO: def gestion_rapport(self):
-        # """ Gestion des rapports """
-        # dict_controller_gestion_rapport = {}
-        # try:
-        #     print("gestion_rapport")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_gestion_rapport["status"] = False
-        #     dict_controller_gestion_rapport["function"] = print(f"gestion_rapport() : error{e}")
-        # return dict_controller_gestion_rapport
 
 # TODO: TOURNOI
     def creer_tournoi(self):
@@ -348,16 +337,21 @@ class Controller:
                 self.gestion_tournois("Joueurs ajoutés au tournoi")
             elif choice_menu_tournoi["choice"] == "2":
                 self.supprimer_joueurs_tournoi(tournoi["tournament"])
-                # self.gestion_tournois("Joueurs supprimés du tournoi")
+                self.gestion_tournois("Joueurs supprimés du tournoi")
             elif choice_menu_tournoi["choice"] == "3":
                 # SI LE NOMBRE DE JOUEURS EST INFERIEUR A 8
                 if len(tournoi["tournament"]["tournament_players"]) < 8:
-                    print("Il faut au minimum 8 joueurs pour lancer le tournoi")
+                    print("Il faut au minimum 8 joueurs pour lancer le tournoi : ")
                     # Attendre 3 secondes
-                    time.sleep(3)
+                    input("Appuyer sur une touche pour continuer")
+                    self.lancer_tournoi()
+                elif len(tournoi["tournament"]["tournament_players"]) > 8:
+                    print("Il ne peut y avoir plus de 8 joueurs dans le tournoi : ")
+                    # Attendre 3 secondes
+                    input("Appuyer sur une touche pour continuer")
                     self.lancer_tournoi()
                 else:
-                    self.tournoi_lancer()
+                    self.tournoi_lancer(tournoi["tournament"])
             elif choice_menu_tournoi["choice"] == "4":
                 self.gestion_tournois()
         except Exception as e:
@@ -443,8 +437,132 @@ class Controller:
             dict_controller_supprimer_joueurs_tournoi["status"] = False
             dict_controller_supprimer_joueurs_tournoi["function"] = print(f"supprimer_joueurs_tournoi() : error{e}")
 
-    #TODO: def tournoi_lancer(self):
-        # pass
+    def tournoi_lancer(self, tournament):
+        """ Start a tournament """
+        dict_controller_tournoi_lancer = {}
+        try:
+            # afficher le tournois
+            os.system("cls")
+            self.view.header(self, "Lancement du tournois")
+            self.afficher_tournoi(tournament, tournament.doc_id)
+            self.view.footer(self)
+            # lancer les rounds
+            os.system("cls")
+            self.view.header(self, "Lancement du tournois | Lancement du round 1")
+            list_player = tournament["tournament_players"]
+            first_round = self.first_round(list_player, tournament)
+
+            # lancer les matchs
+
+            # sauvegarder les resultats du round et des matchs dans les rapports
+
+            # afficher les resultats du round 
+
+            # recuperer les resultats du round
+
+            # afficher les prochains rounds en fonction des resultats des joueurs
+
+            # afficher les resultats du tournois
+            
+            # les sauvagarder dans le rapport_tournoi
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_tournoi_lancer["status"] = False
+            dict_controller_tournoi_lancer["function"] = print(f"tournoi_lancer() : error{e}")
+        return dict_controller_tournoi_lancer
+
+
+    def first_round(self, list_player, tournament):
+        """ Match of tournament """
+        dict_controller_match = {}
+        try:
+            player1 = self.player.get_player_by_id(self, tinydb, list_player[0])
+            player2 = self.player.get_player_by_id(self, tinydb, list_player[1])
+            player3 = self.player.get_player_by_id(self, tinydb, list_player[2])
+            player4 = self.player.get_player_by_id(self, tinydb, list_player[3])
+            player5 = self.player.get_player_by_id(self, tinydb, list_player[4])
+            player6 = self.player.get_player_by_id(self, tinydb, list_player[5])
+            player7 = self.player.get_player_by_id(self, tinydb, list_player[6])
+            player8 = self.player.get_player_by_id(self, tinydb, list_player[7])
+            list_player = [player1, player2, player3, player4, player5, player6, player7, player8]
+            # SORTED 
+            list_player_sorted = sorted(list_player, key=lambda k: k["players"]["ranking"], reverse=True)
+            players = []
+            for player in list_player_sorted:
+                player = player["players"]
+                players.append(player)
+            score_player1_vs_player2 = self.view.demande_score_match(self, players[0], players[4])
+            player1["players"]["score"] = score_player1_vs_player2["score_player1"]
+            player5["players"]["score"] = score_player1_vs_player2["score_player2"]
+            score_player3_vs_player4 = self.view.demande_score_match(self, players[1], players[5])
+            # Ajouter le score dans le score du joueur
+            player2["players"]["score"] = score_player3_vs_player4["score_player1"]
+            player6["players"]["score"] = score_player3_vs_player4["score_player2"]
+            score_player5_vs_player6 = self.view.demande_score_match(self, players[2], players[6])
+            # Ajouter le score dans le score du joueur
+            player3["players"]["score"] = score_player5_vs_player6["score_player1"]
+            player7["players"]["score"] = score_player5_vs_player6["score_player2"]
+            score_player7_vs_player8 = self.view.demande_score_match(self, players[3], players[7])
+            # Ajouter le score dans le score du joueur
+            player4["players"]["score"] = score_player7_vs_player8["score_player1"]
+            player8["players"]["score"] = score_player7_vs_player8["score_player2"]
+
+            datetime_function = datetime.datetime.now()
+            date = datetime_function.strftime("%d/%m/%Y")
+            time = datetime_function.strftime("%H:%M:%S")
+            location_tournament= tournament["tournament_location"]
+            match1 = self.match(
+                date=date, 
+                time=time, 
+                location=location_tournament, 
+                player1=player1["players"], 
+                player2=player2["players"],
+                score1=score_player1_vs_player2["score_player1"],
+                score2=score_player1_vs_player2["score_player2"],
+                round=1
+                )
+            match2 = self.match(
+                date=date,
+                time=time,
+                location=location_tournament,
+                player1=player3["players"],
+                player2=player4["players"],
+                score1=score_player3_vs_player4["score_player1"],
+                score2=score_player3_vs_player4["score_player2"],
+                round=1
+                )
+            match3 = self.match(
+                date=date,
+                time=time,
+                location=location_tournament,
+                player1=player5["players"],
+                player2=player6["players"],
+                score1=score_player5_vs_player6["score_player1"],
+                score2=score_player5_vs_player6["score_player2"],
+                round=1
+                )
+            match4 = self.match(
+                date=date,
+                time=time,
+                location=location_tournament,
+                player1=player7["players"],
+                player2=player8["players"],
+                score1=score_player7_vs_player8["score_player1"],
+                score2=score_player7_vs_player8["score_player2"],
+                round=1
+                )
+            match1.save_match(tinydb, os)
+            match2.save_match(tinydb, os)
+            match3.save_match(tinydb, os)
+            match4.save_match(tinydb, os)
+
+            dict_controller_match["status"] = True
+        except Exception as e:
+            # DICTIONNAIRE
+            dict_controller_match["status"] = False
+            dict_controller_match["function"] = print(f"match() : error{e}")
+        return dict_controller_match
+
 
 # TODO: JOUEURS
     def creer_joueur(self):
@@ -590,37 +708,3 @@ class Controller:
             # DICTIONNAIRE
             dict_controller_all_player["status"] = False
             dict_controller_all_player["function"] = print(f"all_player_tournoi() : error{e}")
-# TODO: RAPPORTS
-
-    #TODO:def rapport_tournoi(self):
-        # """ Report a tournament """
-        # dict_controller_rapport_tournoi = {}
-        # try:
-        #     print("rapport_tournoi")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_rapport_tournoi["status"] = False
-        #     dict_controller_rapport_tournoi["function"] = print(f"rapport_tournoi() : error{e}")
-        # return dict_controller_rapport_tournoi
-
-    #TODO:def rapport_joueur(self):
-        # """ Report a player """
-        # dict_controller_rapport_joueur = {}
-        # try:
-        #     print("rapport_joueur")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_rapport_joueur["status"] = False
-        #     dict_controller_rapport_joueur["function"] = print(f"rapport_joueur() : error{e}")
-        # return dict_controller_rapport_joueur
-
-    #TODO:def rapport_match(self):
-        # """ Report a match """
-        # dict_controller_rapport_match = {}
-        # try:
-        #     print("rapport_match")
-        # except Exception as e:
-        #     # DICTIONNAIRE
-        #     dict_controller_rapport_match["status"] = False
-        #     dict_controller_rapport_match["function"] = print(f"rapport_match() : error{e}")
-        # return dict_controller_rapport_match

@@ -281,6 +281,47 @@ class View:
             dict_view_menu_tournoi["function"] = print(f"menu_tournoi() : {e}")
         return dict_view_menu_tournoi
 
+    def demande_score_match(self, player1, player2):
+        """ Affiche le formulaire de demande du score du match """
+        dict_view_demande_score_match = {}
+        try:
+            # TODO : Affiche le formulaire de demande du score du match
+            player1_name = player1["player_first_name"] + " " + player1["player_last_name"]
+            player2_name = player2["player_first_name"] + " " + player2["player_last_name"]
+            print(f"Score du match : {player1_name} vs {player2_name}")
+            score_player1 = ""
+            # QUI A GAGNÉ ? OU MATCH NUL ?
+            print(f"1. {player1_name}")
+            print(f"2. {player2_name}")
+            print(f"3. Match nul")
+            self.view.footer(self)
+            while score_player1 not in ["1", "2", "3"]:
+                score_player1 = input(f"Veuillez choisir la personne qui a gagné ou match nul si égalité : ")
+            if score_player1 == "1":
+                score_player1 = 1
+                score_player2 = 0
+            elif score_player1 == "2":
+                score_player1 = 0
+                score_player2 = 1
+            elif score_player1 == "3":
+                score_player1 = 0.5
+                score_player2 = 0.5
+        
+            dict_view_demande_score_match["score_player1"] = score_player1
+            dict_view_demande_score_match["score_player2"] = score_player2
+            dict_view_demande_score_match["score"] = {
+                "player1": player1,
+                "player2": player2,
+                "score_player1": score_player1,
+                "score_player2": score_player2
+            }
+            dict_view_demande_score_match["status"] = True
+            dict_view_demande_score_match["function"] = f"demande_score_match() : Affiche le formulaire de demande du score du match"
+        except Exception as e:
+            dict_view_demande_score_match["status"] = False
+            dict_view_demande_score_match["function"] = print(f"demande_score_match() : {e}")
+        return dict_view_demande_score_match
+        
 #TODO: VIEWS JOUEURS
     def gestion_joueur(self, *message):
         """ Affiche le menu de gestion des joueurs """
